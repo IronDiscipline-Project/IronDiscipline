@@ -22,7 +22,7 @@ Minecraftサーバー用 総合管理・規律維持プラグイン。
 
 ## 必要要件
 
-- Java 17+
+- Java 21+
 - Paper / Spigot 1.20+
 - LuckPerms (必須)
 - MySQL, SQLite または H2 Database (デフォルト)
