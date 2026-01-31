@@ -1,5 +1,5 @@
 # IronDiscipline Minecraft Server
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 LABEL maintainer="IronDiscipline"
 LABEL description="Minecraft Server with IronDiscipline Plugin"
@@ -21,7 +21,7 @@ COPY scripts/download-paper.sh /minecraft/
 RUN chmod +x /minecraft/download-paper.sh
 
 # プラグインコピー
-COPY target/IronDiscipline-1.0.0.jar /minecraft/plugins/
+COPY target/IronDiscipline-1.1.0.jar /minecraft/plugins/
 COPY plugins/LuckPerms*.jar /minecraft/plugins/
 
 # 設定ファイル

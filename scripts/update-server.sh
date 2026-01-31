@@ -36,7 +36,7 @@ if curl -L -o "$JAR_NAME" "$DOWNLOAD_URL"; then
     echo "ダウンロード成功！"
     rm -f "${JAR_NAME}.bak"
     # 古いバージョン名のjarがあれば削除
-    rm -f IronDiscipline-1.0.0.jar
+    rm -f IronDiscipline-1.1.0.jar
 else
     echo "ダウンロード失敗。バックアップを復元します。"
     if [ -f "${JAR_NAME}.bak" ]; then

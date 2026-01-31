@@ -11,7 +11,7 @@ echo "====== Minecraft Server Setup ======"
 
 # パッケージインストール
 apt-get update
-apt-get install -y openjdk-17-jre-headless screen curl jq unzip
+apt-get install -y openjdk-21-jre-headless screen curl jq unzip
 
 # Minecraft ユーザー作成
 useradd -r -m -d /opt/minecraft minecraft || true

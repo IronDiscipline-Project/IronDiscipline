@@ -34,7 +34,7 @@ sudo bash setup-ubuntu.sh
 mvn clean package
 
 # アップロード
-scp target/IronDiscipline-1.0.0.jar root@<サーバーIP>:/opt/minecraft/plugins/
+scp target/IronDiscipline-1.1.0.jar root@<サーバーIP>:/opt/minecraft/plugins/
 
 ### FileZilla / WinSCP を使う場合
 1. ホスト: `<サーバーIP>`, ユーザー: `root`, パスワード: `(設定したもの)` で接続
