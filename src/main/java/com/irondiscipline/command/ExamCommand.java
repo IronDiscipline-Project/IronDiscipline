@@ -25,7 +25,7 @@ public class ExamCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "このコマンドはプレイヤーのみ使用可能です。");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_player_only"));
             return true;
         }
 
@@ -34,7 +34,7 @@ public class ExamCommand implements CommandExecutor, TabCompleter {
 
         // 権限チェック (簡易的に少尉以上とする、本来はRankManagerでチェックすべき)
         if (!plugin.getRankManager().getRank(player).isHigherThan(com.irondiscipline.model.Rank.SERGEANT)) {
-            player.sendMessage(ChatColor.RED + "権限がありません。少尉以上の階級が必要です。");
+            player.sendMessage(plugin.getConfigManager().getMessage("exam_permission_denied"));
             return true;
         }
 
@@ -48,28 +48,28 @@ public class ExamCommand implements CommandExecutor, TabCompleter {
         switch (subCommand) {
             case "start":
                 if (args.length < 3) {
-                    player.sendMessage(ChatColor.RED + "使用法: /exam start <プレイヤー> <試験タイプ>");
+                    player.sendMessage(plugin.getConfigManager().getMessage("command_exam_start_usage"));
                     return true;
                 }
                 handleStart(player, args[1], args[2]);
                 break;
             case "pass":
                 if (args.length < 2) {
-                    player.sendMessage(ChatColor.RED + "使用法: /exam pass <プレイヤー>");
+                    player.sendMessage(plugin.getConfigManager().getMessage("command_exam_pass_usage"));
                     return true;
                 }
                 handlePass(player, args[1]);
                 break;
             case "fail":
                 if (args.length < 2) {
-                    player.sendMessage(ChatColor.RED + "使用法: /exam fail <プレイヤー>");
+                    player.sendMessage(plugin.getConfigManager().getMessage("command_exam_fail_usage"));
                     return true;
                 }
                 handleFail(player, args[1]);
                 break;
             case "quiz":
                 if (args.length < 2) {
-                    player.sendMessage(ChatColor.RED + "使用法: /exam quiz <プレイヤー>");
+                    player.sendMessage(plugin.getConfigManager().getMessage("command_exam_quiz_usage"));
                     return true;
                 }
                 handleQuiz(player, args[1]);
@@ -127,12 +127,12 @@ public class ExamCommand implements CommandExecutor, TabCompleter {
     }
 
     private void sendHelp(Player player) {
-        player.sendMessage(ChatColor.GOLD + "=== Exam Command Help ===");
-        player.sendMessage(ChatColor.YELLOW + "/exam start <player> <type> " + ChatColor.WHITE + "- 試験開始宣言");
-        player.sendMessage(ChatColor.YELLOW + "/exam pass <player> " + ChatColor.WHITE + "- 合格させる(昇進)");
-        player.sendMessage(ChatColor.YELLOW + "/exam fail <player> " + ChatColor.WHITE + "- 不合格にする");
-        player.sendMessage(ChatColor.YELLOW + "/exam quiz <player> " + ChatColor.WHITE + "- 筆記試験を開始");
-        player.sendMessage(ChatColor.YELLOW + "/exam sts " + ChatColor.WHITE + "- STS(整列)号令");
+        player.sendMessage(plugin.getConfigManager().getMessage("exam_help_header"));
+        player.sendMessage(plugin.getConfigManager().getMessage("exam_help_start"));
+        player.sendMessage(plugin.getConfigManager().getMessage("exam_help_pass"));
+        player.sendMessage(plugin.getConfigManager().getMessage("exam_help_fail"));
+        player.sendMessage(plugin.getConfigManager().getMessage("exam_help_quiz"));
+        player.sendMessage(plugin.getConfigManager().getMessage("exam_help_sts"));
     }
 
     @Override

@@ -38,8 +38,8 @@ public class ExamManager implements Listener {
      */
     public void startSTS(Player officer) {
         // RP的な演出として、周囲のプレイヤーにメッセージとサウンドを送信
-        String message = ChatColor.YELLOW + "" + ChatColor.BOLD + "=== STS (SHOULDER TO SHOULDER) ===";
-        String subMessage = ChatColor.RED + officer.getName() + " が整列を命じた！直ちに整列せよ！";
+        String message = plugin.getConfigManager().getMessage("exam_sts_header");
+        String subMessage = plugin.getConfigManager().getMessage("exam_sts_message", "%officer%", officer.getName());
 
         officer.getWorld().getPlayers().stream()
                 .filter(p -> p.getLocation().distance(officer.getLocation()) < 50)
@@ -58,21 +58,23 @@ public class ExamManager implements Listener {
      * 試験開始メッセージ
      */
     public void startExamSession(Player instructor, Player target, String type) {
-        String msg = String.format("&e[試験] &f%s &eが &f%s &eの &b%s &e試験を開始した。",
-                instructor.getName(), target.getName(), type);
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        String msg = plugin.getConfigManager().getMessage("exam_start_broadcast",
+            "%instructor%", instructor.getName(),
+            "%target%", target.getName(),
+            "%type%", type);
+        Bukkit.broadcastMessage(msg);
     }
 
     /**
      * 試験合格
      */
     public void passExam(Player instructor, Player target) {
-        String msg = String.format("&a[合格] &f%s &aは試験に合格した！", target.getName());
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        String msg = plugin.getConfigManager().getMessage("exam_pass_broadcast", "%target%", target.getName());
+        Bukkit.broadcastMessage(msg);
 
         plugin.getRankManager().promote(target).thenAccept(newRank -> {
             if (newRank != null) {
-                target.sendMessage(ChatColor.GREEN + "昇進おめでとう！: " + newRank.getDisplay());
+                target.sendMessage(plugin.getConfigManager().getMessage("exam_promotion_congrats", "%rank%", newRank.getDisplay()));
             }
         });
     }
@@ -81,8 +83,8 @@ public class ExamManager implements Listener {
      * 試験不合格
      */
     public void failExam(Player instructor, Player target) {
-        String msg = String.format("&c[不合格] &f%s &cは試験に不合格となった。", target.getName());
-        Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg));
+        String msg = plugin.getConfigManager().getMessage("exam_fail_broadcast", "%target%", target.getName());
+        Bukkit.broadcastMessage(msg);
         // 必要ならキックなどの処理
     }
 
@@ -128,21 +130,33 @@ public class ExamManager implements Listener {
 
     public void startQuiz(Player instructor, Player target) {
         if (quizSessions.containsKey(target.getUniqueId())) {
-            instructor.sendMessage(ChatColor.RED + "そのプレイヤーは既に試験中です。");
+            instructor.sendMessage(plugin.getConfigManager().getMessage("exam_already_in_session"));
             return;
         }
 
         // デモ用の簡単な問題リスト
         List<Question> questions = new ArrayList<>();
-        questions.add(new Question("上官の命令は？", "絶対", Arrays.asList("絶対", "ぜったい")));
-        questions.add(new Question("無許可での発砲は許されるか？(はい/いいえ)", "いいえ", Arrays.asList("いいえ", "no")));
-        questions.add(new Question("サーバーの最強の階級は？", "司令官", Arrays.asList("司令官", "commander")));
+        questions.add(new Question(
+            plugin.getConfigManager().getRawMessage("exam_demo_q1_text"),
+            plugin.getConfigManager().getRawMessage("exam_demo_q1_correct"),
+            Arrays.asList(plugin.getConfigManager().getRawMessage("exam_demo_q1_valid").split(","))
+        ));
+        questions.add(new Question(
+            plugin.getConfigManager().getRawMessage("exam_demo_q2_text"),
+            plugin.getConfigManager().getRawMessage("exam_demo_q2_correct"),
+            Arrays.asList(plugin.getConfigManager().getRawMessage("exam_demo_q2_valid").split(","))
+        ));
+        questions.add(new Question(
+            plugin.getConfigManager().getRawMessage("exam_demo_q3_text"),
+            plugin.getConfigManager().getRawMessage("exam_demo_q3_correct"),
+            Arrays.asList(plugin.getConfigManager().getRawMessage("exam_demo_q3_valid").split(","))
+        ));
 
         QuizSession session = new QuizSession(target.getUniqueId(), questions);
         quizSessions.put(target.getUniqueId(), session);
 
-        target.sendMessage(ChatColor.GREEN + "=== 筆記試験開始 ===");
-        target.sendMessage(ChatColor.YELLOW + "チャットで回答してください。");
+        target.sendMessage(plugin.getConfigManager().getMessage("exam_quiz_start_header"));
+        target.sendMessage(plugin.getConfigManager().getMessage("exam_quiz_instruction"));
         askNextQuestion(target, session);
     }
 
@@ -152,7 +166,9 @@ public class ExamManager implements Listener {
             finishQuiz(player, session);
             return;
         }
-        player.sendMessage(ChatColor.GOLD + "問" + (session.currentIndex + 1) + ": " + ChatColor.WHITE + q.text);
+        player.sendMessage(plugin.getConfigManager().getMessage("exam_quiz_question_format",
+            "%index%", String.valueOf(session.currentIndex + 1),
+            "%question%", q.text));
     }
 
     private void finishQuiz(Player player, QuizSession session) {
@@ -162,14 +178,14 @@ public class ExamManager implements Listener {
         int total = session.questions.size();
         double percentage = (double) score / total;
 
-        player.sendMessage(ChatColor.YELLOW + "試験終了！");
-        player.sendMessage(ChatColor.WHITE + "正解数: " + score + " / " + total);
+        player.sendMessage(plugin.getConfigManager().getMessage("exam_quiz_finished"));
+        player.sendMessage(plugin.getConfigManager().getMessage("exam_quiz_score", "%score%", String.valueOf(score), "%total%", String.valueOf(total)));
 
         if (percentage >= 0.8) { // 80%以上で合格
-            Bukkit.broadcastMessage(ChatColor.GREEN + player.getName() + " が筆記試験に合格しました！");
+            Bukkit.broadcastMessage(plugin.getConfigManager().getMessage("exam_quiz_pass_broadcast", "%player%", player.getName()));
             plugin.getRankManager().promote(player);
         } else {
-            player.sendMessage(ChatColor.RED + "不合格です。出直してこい！");
+            player.sendMessage(plugin.getConfigManager().getMessage("exam_quiz_fail_message"));
         }
     }
 
@@ -187,7 +203,7 @@ public class ExamManager implements Listener {
         // 強制終了コマンド
         if (answer.equalsIgnoreCase("cancel")) {
             quizSessions.remove(player.getUniqueId());
-            player.sendMessage(ChatColor.RED + "試験をキャンセルしました。");
+            player.sendMessage(plugin.getConfigManager().getMessage("exam_quiz_cancelled"));
             return;
         }
 
@@ -195,10 +211,10 @@ public class ExamManager implements Listener {
         if (q != null) {
             boolean isCorrect = q.isCorrect(answer);
             if (isCorrect) {
-                player.sendMessage(ChatColor.GREEN + "正解！");
+                player.sendMessage(plugin.getConfigManager().getMessage("exam_quiz_correct"));
                 session.score++;
             } else {
-                player.sendMessage(ChatColor.RED + "不正解... (正解: " + q.correctDisplay + ")");
+                player.sendMessage(plugin.getConfigManager().getMessage("exam_quiz_incorrect", "%answer%", q.correctDisplay));
             }
 
             session.currentIndex++;

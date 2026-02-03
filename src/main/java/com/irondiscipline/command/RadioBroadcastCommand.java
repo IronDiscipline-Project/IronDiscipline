@@ -21,7 +21,7 @@ public class RadioBroadcastCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("§cこのコマンドはプレイヤーのみ使用可能。");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_player_only"));
             return true;
         }
 
@@ -31,7 +31,7 @@ public class RadioBroadcastCommand implements CommandExecutor {
         }
 
         if (args.length < 1) {
-            player.sendMessage("§c使用法: /rb <メッセージ>");
+            player.sendMessage(plugin.getConfigManager().getMessage("command_rb_usage"));
             return true;
         }
 

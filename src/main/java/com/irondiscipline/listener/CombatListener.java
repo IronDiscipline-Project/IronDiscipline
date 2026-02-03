@@ -83,7 +83,7 @@ public class CombatListener implements Listener {
         ItemStack item = player.getInventory().getItemInMainHand();
         
         if (item == null || item.getType() == Material.AIR) {
-            return "素手";
+            return plugin.getConfigManager().getRawMessage("weapon_hand");
         }
         
         // カスタム名がある場合はそれを使用
@@ -106,18 +106,18 @@ public class CombatListener implements Listener {
         
         // よく使われる武器の翻訳
         return switch (name) {
-            case "DIAMOND_SWORD" -> "ダイヤの剣";
-            case "IRON_SWORD" -> "鉄の剣";
-            case "GOLDEN_SWORD" -> "金の剣";
-            case "STONE_SWORD" -> "石の剣";
-            case "WOODEN_SWORD" -> "木の剣";
-            case "NETHERITE_SWORD" -> "ネザライトの剣";
-            case "BOW" -> "弓";
-            case "CROSSBOW" -> "クロスボウ";
-            case "TRIDENT" -> "トライデント";
-            case "DIAMOND_AXE" -> "ダイヤの斧";
-            case "IRON_AXE" -> "鉄の斧";
-            case "NETHERITE_AXE" -> "ネザライトの斧";
+            case "DIAMOND_SWORD" -> plugin.getConfigManager().getRawMessage("weapon_diamond_sword");
+            case "IRON_SWORD" -> plugin.getConfigManager().getRawMessage("weapon_iron_sword");
+            case "GOLDEN_SWORD" -> plugin.getConfigManager().getRawMessage("weapon_golden_sword");
+            case "STONE_SWORD" -> plugin.getConfigManager().getRawMessage("weapon_stone_sword");
+            case "WOODEN_SWORD" -> plugin.getConfigManager().getRawMessage("weapon_wooden_sword");
+            case "NETHERITE_SWORD" -> plugin.getConfigManager().getRawMessage("weapon_netherite_sword");
+            case "BOW" -> plugin.getConfigManager().getRawMessage("weapon_bow");
+            case "CROSSBOW" -> plugin.getConfigManager().getRawMessage("weapon_crossbow");
+            case "TRIDENT" -> plugin.getConfigManager().getRawMessage("weapon_trident");
+            case "DIAMOND_AXE" -> plugin.getConfigManager().getRawMessage("weapon_diamond_axe");
+            case "IRON_AXE" -> plugin.getConfigManager().getRawMessage("weapon_iron_axe");
+            case "NETHERITE_AXE" -> plugin.getConfigManager().getRawMessage("weapon_netherite_axe");
             default -> name.replace("_", " ").toLowerCase();
         };
     }

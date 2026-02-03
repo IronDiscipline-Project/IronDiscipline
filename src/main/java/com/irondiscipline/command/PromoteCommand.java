@@ -33,7 +33,7 @@ public class PromoteCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length < 1) {
-            sender.sendMessage("§c使用法: /promote <プレイヤー名>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_promote_usage"));
             return true;
         }
 

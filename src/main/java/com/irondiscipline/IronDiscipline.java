@@ -56,7 +56,7 @@ public class IronDiscipline extends JavaPlugin {
 
         // LuckPerms連携
         if (!hookLuckPerms()) {
-            getLogger().severe("LuckPermsが見つかりません！プラグインを無効化します。");
+            getLogger().severe(configManager.getRawMessage("log_luckperms_not_found"));
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -70,7 +70,7 @@ public class IronDiscipline extends JavaPlugin {
         // コマンド登録
         registerCommands();
 
-        getLogger().info(ChatColor.GREEN + "鉄の規律 v" + getDescription().getVersion() + " 起動完了！");
+        getLogger().info(configManager.getRawMessage("log_startup_success").replace("%version%", getDescription().getVersion()));
     }
 
     @Override
@@ -97,7 +97,7 @@ public class IronDiscipline extends JavaPlugin {
             discordManager.shutdown();
         }
 
-        getLogger().info("鉄の規律 シャットダウン完了");
+        getLogger().info(configManager.getRawMessage("log_shutdown_complete"));
     }
 
     private void logBanner() {
@@ -145,7 +145,7 @@ public class IronDiscipline extends JavaPlugin {
         // Discord Bot 起動
         initDiscord();
 
-        getLogger().info("マネージャー初期化完了");
+        getLogger().info(configManager.getRawMessage("log_managers_initialized"));
     }
 
     private void registerListeners() {
@@ -154,7 +154,7 @@ public class IronDiscipline extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new JoinQuitListener(this), this);
         Bukkit.getPluginManager().registerEvents(new GestureListener(this), this);
 
-        getLogger().info("イベントリスナー登録完了");
+        getLogger().info(configManager.getRawMessage("log_listeners_registered"));
     }
 
     private void registerCommands() {
@@ -193,7 +193,7 @@ public class IronDiscipline extends JavaPlugin {
         // Phase 4 - Discord連携
         getCommand("link").setExecutor(new LinkCommand(this));
 
-        getLogger().info("コマンド登録完了");
+        getLogger().info(configManager.getRawMessage("log_commands_registered"));
     }
 
     private void initDiscord() {
@@ -206,7 +206,7 @@ public class IronDiscipline extends JavaPlugin {
         if (botToken != null && !botToken.isEmpty() && configManager.isDiscordEnabled()) {
             discordManager.start(botToken, channelId, guildId, unverifiedRoleId, verifiedRoleId);
         } else {
-            getLogger().info("Discord連携は無効です（config.ymlで設定可能）");
+            getLogger().info(configManager.getRawMessage("log_discord_disabled"));
         }
     }
 
@@ -216,7 +216,7 @@ public class IronDiscipline extends JavaPlugin {
     public void reload() {
         reloadConfig();
         configManager.reload();
-        getLogger().info("設定リロード完了");
+        getLogger().info(configManager.getRawMessage("log_reload_complete"));
     }
 
     // ===== Getters =====

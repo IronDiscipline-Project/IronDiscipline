@@ -83,7 +83,7 @@ public class JailManager {
 
                             // 通知
                             target.sendMessage(plugin.getConfigManager().getMessage("jail_you_jailed",
-                                    "%reason%", reason != null ? reason : "理由なし"));
+                                    "%reason%", reason != null ? reason : plugin.getConfigManager().getRawMessage("jail_reason_default")));
                         });
                     } else {
                         plugin.getLogger().warning("隔離処理中断: DB保存に失敗しました - " + target.getName());
@@ -227,7 +227,7 @@ public class JailManager {
                             finalOriginalLoc = locString;
 
                             // DB更新
-                            plugin.getStorageManager().saveJailedPlayer(playerId, player.getName(), "Offline Jail",
+                            plugin.getStorageManager().saveJailedPlayer(playerId, player.getName(), plugin.getConfigManager().getRawMessage("jail_reason_offline"),
                                     null, locString, newInvBackup, newArmorBackup);
 
                             // インベントリクリア
@@ -239,7 +239,7 @@ public class JailManager {
                         // キャッシュ復元
                         if (!jailedPlayers.containsKey(playerId)) {
                             jailedPlayers.put(playerId,
-                                    new JailData(playerId, player.getName(), "再接続", System.currentTimeMillis(), null,
+                                    new JailData(playerId, player.getName(), plugin.getConfigManager().getRawMessage("jail_reason_reconnect"), System.currentTimeMillis(), null,
                                             finalOriginalLoc));
                         }
 
@@ -249,7 +249,7 @@ public class JailManager {
                             player.teleport(jailLocation);
                             player.setGameMode(GameMode.ADVENTURE);
                             player.sendMessage(plugin.getConfigManager().getMessage("jail_you_jailed",
-                                    "%reason%", "拘留中のため再配置"));
+                                    "%reason%", plugin.getConfigManager().getRawMessage("jail_reason_relocated")));
                         }
                     });
                 });

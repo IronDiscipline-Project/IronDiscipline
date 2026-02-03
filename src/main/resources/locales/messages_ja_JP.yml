@@ -153,3 +153,189 @@ exam_q5_c1: "衛生兵を呼ぶ"
 exam_q5_c2: "無視して戦闘を続ける"
 exam_q5_c3: "一人で救助する"
 exam_q5_c4: "撤退する"
+
+# DemoteCommand
+command_usage_demote: "&c使用法: /demote <プレイヤー名>"
+
+# DivisionCommand
+command_division_set_usage: "&c使用法: /division set <プレイヤー> <部隊>"
+player_not_found_simple: "&cプレイヤーが見つかりません"
+division_set_sender: "&a%player% を %division% &aに配属した"
+division_set_target: "&e%division% &eに配属されました"
+command_division_remove_usage: "&c使用法: /division remove <プレイヤー>"
+division_remove_sender: "&a%player% の部隊配属を解除した"
+division_remove_target: "&e部隊配属が解除されました"
+division_list_header: "&6=== 部隊一覧 ==="
+division_list_entry: "%division% &7(%count%人)"
+division_info_none: "&7%player% は部隊に所属していません"
+division_info_display: "&f%player% の所属: %division%"
+command_division_members_usage: "&c使用法: /division members <部隊>"
+division_members_header: "&6=== %division% &6のメンバー ==="
+division_members_empty: "&7メンバーなし"
+division_help_header: "&6=== 部隊コマンド ==="
+division_help_set: "&e/division set <プレイヤー> <部隊> &7- 配属"
+division_help_remove: "&e/division remove <プレイヤー> &7- 解除"
+division_help_list: "&e/division list &7- 部隊一覧"
+division_help_info: "&e/division info [プレイヤー] &7- 所属確認"
+division_help_members: "&e/division members <部隊> &7- メンバー一覧"
+
+# ExamCommand
+command_player_only: "&cこのコマンドはプレイヤーのみ実行可能"
+exam_permission_denied: "&c権限がない。少尉以上の階級が必要だ。"
+command_exam_start_usage: "&c使用法: /exam start <プレイヤー> <試験タイプ>"
+command_exam_pass_usage: "&c使用法: /exam pass <プレイヤー>"
+command_exam_fail_usage: "&c使用法: /exam fail <プレイヤー>"
+command_exam_quiz_usage: "&c使用法: /exam quiz <プレイヤー>"
+exam_help_header: "&6=== Exam Command Help ==="
+exam_help_start: "&e/exam start <player> <type> &f- 試験開始宣言"
+exam_help_pass: "&e/exam pass <player> &f- 合格させる(昇進)"
+exam_help_fail: "&e/exam fail <player> &f- 不合格にする"
+exam_help_quiz: "&e/exam quiz <player> &f- 筆記試験を開始"
+exam_help_sts: "&e/exam sts &f- STS(整列)号令"
+
+# GrantCommand
+command_grant_usage: "&c使用法: /grant <プレイヤー名> [秒数]"
+grant_invalid_seconds: "&c秒数は正の整数で指定せよ。"
+grant_invalid_number: "&c無効な秒数: %input%"
+
+# IronDisciplineCommand
+command_iron_version: "&6鉄の規律 (IronDiscipline) v%version%"
+command_iron_cleanup_started: "&a古いログの削除を開始した。"
+command_iron_tp_usage: "&c使用法: /iron tp <プレイヤー>"
+iron_tp_success: "&a%player% にテレポートした"
+command_iron_bring_usage: "&c使用法: /iron bring <プレイヤー>"
+iron_bring_success_sender: "&a%player% を呼び出した"
+iron_bring_success_target: "&e上官によって呼び出されました"
+command_iron_freeze_usage: "&c使用法: /iron freeze <プレイヤー>"
+iron_freeze_success_sender: "&a%player% を凍結した"
+iron_freeze_success_target: "&c&l【凍結】&r&c 移動が禁止されました"
+command_iron_unfreeze_usage: "&c使用法: /iron unfreeze <プレイヤー>"
+iron_unfreeze_success_sender: "&a%player% の凍結を解除した"
+iron_unfreeze_success_target: "&a凍結が解除されました"
+iron_not_frozen: "&c%player% は凍結されていません"
+command_iron_announce_usage: "&c使用法: /iron announce <メッセージ>"
+iron_announce_title: "&6&l【通達】"
+iron_announce_chat: "&6&l【通達】&r &f%message%"
+iron_announce_sent: "&aアナウンスを送信した"
+iron_help_header: "&6===== 鉄の規律 コマンド ====="
+iron_help_reload: "&e/iron reload &7- 設定をリロード"
+iron_help_version: "&e/iron version &7- バージョン表示"
+iron_help_cleanup: "&e/iron cleanup &7- 古いログを削除"
+iron_help_admin_header: "&6----- 管理コマンド -----"
+iron_help_kick: "&e/iron kick <player> [理由] &7- キック"
+iron_help_ban: "&e/iron ban <player> [理由] &7- BAN"
+iron_help_tp: "&e/iron tp <player> &7- テレポート"
+iron_help_bring: "&e/iron bring <player> &7- 呼び出し"
+iron_help_freeze: "&e/iron freeze <player> &7- 凍結"
+iron_help_unfreeze: "&e/iron unfreeze <player> &7- 解凍"
+iron_help_announce: "&e/iron announce <msg> &7- 全体通達"
+
+# JailCommand
+command_jail_usage: "&c使用法: /jail <プレイヤー名> [理由]"
+jail_reason_default: "理由なし"
+jail_failed: "&c隔離に失敗した。既に隔離中か、設定エラーの可能性ある。"
+jail_reason_suggestion_1: "規律違反"
+jail_reason_suggestion_2: "命令無視"
+jail_reason_suggestion_3: "不正行為"
+
+# KillLogCommand
+killlog_searching: "&e%player% の戦闘ログを検索中..."
+killlog_header_player: "&6===== 戦闘ログ (%player%) ====="
+killlog_not_found: "&7ログが見つからない。"
+killlog_header_latest: "&6===== 最新戦闘ログ ====="
+killlog_environment: "環境"
+killlog_entry_format: "&7[%date%]%killer_color% %killer% &7→ &c%victim% &7| &b%weapon% &7(%distance%)"
+
+# LinkCommand
+link_success_notification_title: "🔗 連携完了"
+
+# PlaytimeCommand
+playtime_header: "&6=== %player% の勤務時間 ==="
+playtime_total: "&7累計: &f%time%"
+playtime_today: "&7本日: &f%time%"
+playtime_ranking_header: "&6=== 勤務時間ランキング ==="
+playtime_rank_1: "&6&l1位"
+playtime_rank_2: "&f&l2位"
+playtime_rank_3: "&c&l3位"
+playtime_rank_other: "&7%rank%位"
+
+# PromoteCommand
+command_promote_usage: "&c使用法: /promote <プレイヤー名>"
+
+# RadioBroadcastCommand
+command_rb_usage: "&c使用法: /rb <メッセージ>"
+
+# UnjailCommand
+command_unjail_usage: "&c使用法: /unjail <プレイヤー名>"
+unjail_not_jailed: "&cこのプレイヤーは拘留されていない。"
+
+# ExamManager
+exam_sts_header: "&e&l=== STS (SHOULDER TO SHOULDER) ==="
+exam_sts_message: "&c%officer% が整列を命じた！直ちに整列せよ！"
+exam_start_broadcast: "&e[試験] &f%instructor% &eが &f%target% &eの &b%type% &e試験を開始した。"
+exam_pass_broadcast: "&a[合格] &f%target% &aは試験に合格した！"
+exam_promotion_congrats: "&a昇進おめでとう！: %rank%"
+exam_fail_broadcast: "&c[不合格] &f%target% &cは試験に不合格となった。"
+exam_already_in_session: "&cそのプレイヤーは既に試験中です。"
+exam_quiz_start_header: "&a=== 筆記試験開始 ==="
+exam_quiz_instruction: "&eチャットで回答してください。"
+exam_quiz_question_format: "&6問%index%: &f%question%"
+exam_quiz_finished: "&e試験終了！"
+exam_quiz_score: "&f正解数: %score% / %total%"
+exam_quiz_pass_broadcast: "&a%player% が筆記試験に合格しました！"
+exam_quiz_fail_message: "&c不合格です。出直してこい！"
+exam_quiz_cancelled: "&c試験をキャンセルしました。"
+exam_quiz_correct: "&a正解！"
+exam_quiz_incorrect: "&c不正解... (正解: %answer%)"
+exam_demo_q1_text: "上官の命令は？"
+exam_demo_q1_correct: "絶対"
+exam_demo_q1_valid: "絶対,ぜったい"
+exam_demo_q2_text: "無許可での発砲は許されるか？(はい/いいえ)"
+exam_demo_q2_correct: "いいえ"
+exam_demo_q2_valid: "いいえ,no"
+exam_demo_q3_text: "サーバーの最強の階級は？"
+exam_demo_q3_correct: "司令官"
+exam_demo_q3_valid: "司令官,commander"
+
+# JailManager
+jail_reason_offline: "Offline Jail"
+jail_reason_reconnect: "再接続"
+jail_reason_relocated: "拘留中のため再配置"
+
+# PTSManager
+pts_actionbar_requesting: "&e✋ PTS要請中..."
+pts_actionbar_timeout: "&c⏱ PTS要請がタイムアウトしました"
+pts_actionbar_expired: "&c⏱ 発言許可失効"
+pts_actionbar_remaining: "%color%🎤 発言許可: %seconds%秒"
+
+# WarningManager
+warn_punish_kick_reason: "&c警告が%limit%回に達したため、キックされました。"
+warn_punish_jail_reason: "警告%count%回による自動隔離"
+
+# ChatListener
+chat_exam_blocked: "&c&l【試験中】&r&7 試験中はチャットが禁止されています"
+
+# CombatListener Weapons
+weapon_hand: "素手"
+weapon_diamond_sword: "ダイヤの剣"
+weapon_iron_sword: "鉄の剣"
+weapon_golden_sword: "金の剣"
+weapon_stone_sword: "石の剣"
+weapon_wooden_sword: "木の剣"
+weapon_netherite_sword: "ネザライトの剣"
+weapon_bow: "弓"
+weapon_crossbow: "クロスボウ"
+weapon_trident: "トライデント"
+weapon_diamond_axe: "ダイヤの斧"
+weapon_iron_axe: "鉄の斧"
+weapon_netherite_axe: "ネザライトの斧"
+
+# IronDiscipline Main
+log_luckperms_not_found: "LuckPermsが見つかりません！プラグインを無効化します。"
+log_startup_success: "&a鉄の規律 v%version% 起動完了！"
+log_shutdown_complete: "鉄の規律 シャットダウン完了"
+log_managers_initialized: "マネージャー初期化完了"
+log_listeners_registered: "イベントリスナー登録完了"
+log_commands_registered: "コマンド登録完了"
+log_discord_disabled: "Discord連携は無効です（config.ymlで設定可能）"
+log_reload_complete: "設定リロード完了"

@@ -53,9 +53,9 @@ public class WarningManager {
                 int jailLimit = plugin.getConfigManager().getWarningJailThreshold();
 
                 if (count >= kickLimit) {
-                    target.kickPlayer("§c警告が" + kickLimit + "回に達したため、キックされました。");
+                    target.kickPlayer(plugin.getConfigManager().getRawMessage("warn_punish_kick_reason").replace("%limit%", String.valueOf(kickLimit)));
                 } else if (count >= jailLimit) {
-                    plugin.getJailManager().jail(target, null, "警告" + count + "回による自動隔離");
+                    plugin.getJailManager().jail(target, null, plugin.getConfigManager().getRawMessage("warn_punish_jail_reason").replace("%count%", String.valueOf(count)));
                 }
             });
         }

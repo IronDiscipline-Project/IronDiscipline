@@ -36,22 +36,22 @@ public class PlaytimeCommand implements CommandExecutor, TabCompleter {
         if (args.length > 0) {
             target = Bukkit.getPlayer(args[0]);
             if (target == null) {
-                sender.sendMessage("§cプレイヤーが見つかりません");
+                sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found_simple"));
                 return true;
             }
         } else if (sender instanceof Player) {
             target = (Player) sender;
         } else {
-            sender.sendMessage("§cプレイヤーを指定してください");
+            sender.sendMessage(plugin.getConfigManager().getMessage("error_specify_player"));
             return true;
         }
         
         String totalTime = plugin.getPlaytimeManager().getFormattedPlaytime(target.getUniqueId());
         String todayTime = plugin.getPlaytimeManager().getFormattedTodayPlaytime(target.getUniqueId());
         
-        sender.sendMessage("§6=== " + target.getName() + " の勤務時間 ===");
-        sender.sendMessage("§7累計: §f" + totalTime);
-        sender.sendMessage("§7本日: §f" + todayTime);
+        sender.sendMessage(plugin.getConfigManager().getMessage("playtime_header", "%player%", target.getName()));
+        sender.sendMessage(plugin.getConfigManager().getMessage("playtime_total", "%time%", totalTime));
+        sender.sendMessage(plugin.getConfigManager().getMessage("playtime_today", "%time%", todayTime));
         
         return true;
     }
@@ -59,7 +59,7 @@ public class PlaytimeCommand implements CommandExecutor, TabCompleter {
     private void showTopPlaytime(CommandSender sender) {
         List<Map.Entry<UUID, Long>> top = plugin.getPlaytimeManager().getTopPlaytime(10);
         
-        sender.sendMessage("§6=== 勤務時間ランキング ===");
+        sender.sendMessage(plugin.getConfigManager().getMessage("playtime_ranking_header"));
         
         int rank = 1;
         for (Map.Entry<UUID, Long> entry : top) {
@@ -69,10 +69,10 @@ public class PlaytimeCommand implements CommandExecutor, TabCompleter {
             String time = plugin.getPlaytimeManager().getFormattedPlaytime(entry.getKey());
             
             String prefix = switch (rank) {
-                case 1 -> "§6§l1位";
-                case 2 -> "§f§l2位";
-                case 3 -> "§c§l3位";
-                default -> "§7" + rank + "位";
+                case 1 -> plugin.getConfigManager().getRawMessage("playtime_rank_1");
+                case 2 -> plugin.getConfigManager().getRawMessage("playtime_rank_2");
+                case 3 -> plugin.getConfigManager().getRawMessage("playtime_rank_3");
+                default -> plugin.getConfigManager().getRawMessage("playtime_rank_other").replace("%rank%", String.valueOf(rank));
             };
             
             sender.sendMessage(prefix + " §f" + name + " §7- §f" + time);

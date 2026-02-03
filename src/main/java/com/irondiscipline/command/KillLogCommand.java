@@ -60,11 +60,11 @@ public class KillLogCommand implements CommandExecutor, TabCompleter {
             
             if (targetId == null) {
                 // オフラインプレイヤーを検索（簡易実装）
-                sender.sendMessage("§e" + targetName + " の戦闘ログを検索中...");
+                sender.sendMessage(plugin.getConfigManager().getMessage("killlog_searching", "%player%", targetName));
                 // 全ログから名前でフィルタ
                 plugin.getStorageManager().getAllKillLogsAsync(100).thenAccept(logs -> {
                     Bukkit.getScheduler().runTask(plugin, () -> {
-                        sender.sendMessage(ChatColor.GOLD + "===== 戦闘ログ (" + finalTargetName + ") =====");
+                        sender.sendMessage(plugin.getConfigManager().getMessage("killlog_header_player", "%player%", finalTargetName));
                         int count = 0;
                         for (KillLog log : logs) {
                             if (count >= displayLimit) break;
@@ -75,19 +75,19 @@ public class KillLogCommand implements CommandExecutor, TabCompleter {
                             }
                         }
                         if (count == 0) {
-                            sender.sendMessage(ChatColor.GRAY + "ログが見つからない。");
+                            sender.sendMessage(plugin.getConfigManager().getMessage("killlog_not_found"));
                         }
                     });
                 });
             } else {
                 plugin.getStorageManager().getKillLogsAsync(targetId, displayLimit).thenAccept(logs -> {
                     Bukkit.getScheduler().runTask(plugin, () -> {
-                        sender.sendMessage(ChatColor.GOLD + "===== 戦闘ログ (" + finalTargetName + ") =====");
+                        sender.sendMessage(plugin.getConfigManager().getMessage("killlog_header_player", "%player%", finalTargetName));
                         for (KillLog log : logs) {
                             sendLogEntry(sender, log);
                         }
                         if (logs.isEmpty()) {
-                            sender.sendMessage(ChatColor.GRAY + "ログが見つからない。");
+                            sender.sendMessage(plugin.getConfigManager().getMessage("killlog_not_found"));
                         }
                     });
                 });
@@ -96,12 +96,12 @@ public class KillLogCommand implements CommandExecutor, TabCompleter {
             // 全ログ
             plugin.getStorageManager().getAllKillLogsAsync(displayLimit).thenAccept(logs -> {
                 Bukkit.getScheduler().runTask(plugin, () -> {
-                    sender.sendMessage(ChatColor.GOLD + "===== 最新戦闘ログ =====");
+                    sender.sendMessage(plugin.getConfigManager().getMessage("killlog_header_latest"));
                     for (KillLog log : logs) {
                         sendLogEntry(sender, log);
                     }
                     if (logs.isEmpty()) {
-                        sender.sendMessage(ChatColor.GRAY + "ログが見つからない。");
+                        sender.sendMessage(plugin.getConfigManager().getMessage("killlog_not_found"));
                     }
                 });
             });
@@ -115,17 +115,15 @@ public class KillLogCommand implements CommandExecutor, TabCompleter {
      */
     private void sendLogEntry(CommandSender sender, KillLog log) {
         String date = DATE_FORMAT.format(new Date(log.getTimestamp()));
-        String killer = log.getKillerName() != null ? log.getKillerName() : "環境";
+        String killer = log.getKillerName() != null ? log.getKillerName() : plugin.getConfigManager().getRawMessage("killlog_environment");
         
-        sender.sendMessage(String.format(
-            "%s§7[%s]%s %s §7→ §c%s §7| %s §7(%s)",
-            ChatColor.GRAY,
-            date,
-            ChatColor.RED,
-            killer,
-            log.getVictimName(),
-            ChatColor.AQUA + log.getWeapon(),
-            log.getFormattedDistance()
+        sender.sendMessage(plugin.getConfigManager().getMessage("killlog_entry_format",
+            "%date%", date,
+            "%killer_color%", ChatColor.RED.toString(),
+            "%killer%", killer,
+            "%victim%", log.getVictimName(),
+            "%weapon%", log.getWeapon(),
+            "%distance%", log.getFormattedDistance()
         ));
     }
 

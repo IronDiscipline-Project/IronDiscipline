@@ -33,7 +33,7 @@ public class DemoteCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length < 1) {
-            sender.sendMessage("§c使用法: /demote <プレイヤー名>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_usage_demote"));
             return true;
         }
 
