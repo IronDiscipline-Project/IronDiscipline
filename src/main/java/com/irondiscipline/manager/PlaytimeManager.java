@@ -133,11 +133,11 @@ public class PlaytimeManager implements Listener {
         long days = hours / 24;
         
         if (days > 0) {
-            return String.format("%d日 %d時間 %d分", days, hours % 24, minutes % 60);
+            return String.format(plugin.getConfigManager().getRawMessage("time_format_days"), days, hours % 24, minutes % 60);
         } else if (hours > 0) {
-            return String.format("%d時間 %d分", hours, minutes % 60);
+            return String.format(plugin.getConfigManager().getRawMessage("time_format_hours"), hours, minutes % 60);
         } else {
-            return String.format("%d分", minutes);
+            return String.format(plugin.getConfigManager().getRawMessage("time_format_minutes"), minutes);
         }
     }
 
@@ -168,7 +168,7 @@ public class PlaytimeManager implements Listener {
                 gson.toJson(data, writer);
             }
         } catch (IOException e) {
-            plugin.getLogger().warning("勤務時間データ保存失敗: " + e.getMessage());
+            plugin.getLogger().warning(plugin.getConfigManager().getRawMessage("playtime_save_failed").replace("%error%", e.getMessage()));
         }
     }
 
@@ -188,9 +188,9 @@ public class PlaytimeManager implements Listener {
                     } catch (IllegalArgumentException ignored) {}
                 }
             }
-            plugin.getLogger().info("勤務時間データ読み込み完了");
+            plugin.getLogger().info(plugin.getConfigManager().getRawMessage("playtime_load_success"));
         } catch (IOException e) {
-            plugin.getLogger().warning("勤務時間データ読み込み失敗: " + e.getMessage());
+            plugin.getLogger().warning(plugin.getConfigManager().getRawMessage("playtime_load_failed").replace("%error%", e.getMessage()));
         }
     }
 }

@@ -2,6 +2,7 @@ name: IronDiscipline
 version: ${project.version}
 main: com.irondiscipline.IronDiscipline
 api-version: '1.20'
+folia-supported: true
 authors: [IronDiscipline Team]
 description: 鉄の規律 - 軍事RP向け規律システムプラグイン
 website: https://github.com/irondiscipline

@@ -1,0 +1,155 @@
+prefix: "&8[&c钢铁纪律&8] "
+
+# 军衔相关
+rank_promoted: "&a已将 %player% 晋升为 &f%rank%&a。"
+rank_demoted: "&e已将 %player% 降职为 &f%rank%&e。"
+rank_changed_self: "&a你的军衔已变更为 &f%rank%&a。"
+rank_already_max: "&c无法进一步晋升。"
+rank_already_min: "&c无法进一步降职。"
+
+# PTS (发言许可) 相关
+pts_granted: "&a已授予 %player% &f%seconds% 秒&a的发言权。"
+pts_received: "&a你已被授予发言许可。剩余时间：&f%seconds% 秒&a。"
+pts_expired: "&e发言许可已过期。"
+pts_required: "&c你需要上级的许可才能发言。连续潜行两次 (Double Sneak) 请求 PTS。"
+pts_request_sent: "&ePTS 请求已发送。请等待上级许可。"
+pts_request_notify: "&e%player% 正在请求发言许可。 &7/grant %player%"
+pts_request_timeout: "&cPTS 请求超时。请重新请求。"
+
+# 无线电相关
+radio_joined: "&a已加入无线电频率 &f%freq%&a。"
+radio_left: "&e已离开无线电。"
+radio_usage: "&c用法: /radio <频率> 或 /radio off"
+
+# 禁闭 (Jail) 相关
+jail_sent: "&c%player% 已被关押。理由: %reason%"
+jail_released: "&a%player% 已被释放。"
+jail_you_jailed: "&c你已被关押。理由: %reason%"
+jail_you_released: "&a你已被释放。回到岗位。"
+jail_not_set: "&c未设置禁闭位置。请使用 /setjail。"
+jail_location_set: "&a禁闭位置已设置。"
+
+# 常规
+player_not_found: "&c找不到玩家: %player%"
+no_permission: "&c你没有权限。"
+config_reloaded: "&a配置已重载。"
+
+# 军衔限制
+rank_insufficient: "&c需要少尉或更高军衔。要求: {required}"
+rank_cannot_operate: "&c你没有权限操作 {target} ({target_rank})。你只能操作军衔低于你的玩家。"
+
+# 可配置字符串
+pts_request_prefix: "&8[&ePTS 请求&8]"
+radio_format: "&8[&b无线电 %freq%&8] &7%rank% %player%&8: &f%message%"
+jail_blocked_message: "&c你正在被拘留。不允许发言。"
+
+# WarnCommand
+command_usage_warn: "&c用法: /warn <玩家> <理由>"
+warn_success: "&a警告了 %player% (次数: %count%)"
+warn_received: "&c&l[警告]&r&c %reason% &7(警告 #%count%)"
+warn_kick_broadcast: "&c%player% 因 %count% 次警告被踢出。"
+warn_jail_broadcast: "&e%player% 因 %count% 次警告被关押。"
+warn_none: "&a%player% 没有警告记录。"
+warn_history_header: "&6=== %player% 的警告记录 (%count%) ==="
+warn_history_entry: "&7%index%. &f%reason% &8(%date%)"
+command_usage_clearwarnings: "&c用法: /clearwarnings <玩家>"
+warn_clear_success: "&a已清除 %player% 的所有警告。"
+command_usage_unwarn: "&c用法: /unwarn <玩家>"
+warn_remove_success: "&a已移除 %player% 的最近一次警告。"
+warn_cannot_warn_officer: "&c宪兵不能警告军官。"
+
+# IronDisciplineCommand
+command_usage_iron_kick: "&c用法: /iron kick <玩家> [理由]"
+kick_broadcast: "&c&l[公告]&r &f%player% &7被踢出。理由: %reason%"
+kick_success: "&a已踢出 %player%。"
+command_usage_iron_ban: "&c用法: /iron ban <玩家> [理由]"
+ban_broadcast: "&4&l[封禁]&r &f%player% &7被封禁。理由: %reason%"
+ban_success: "&a已封禁 %player%。"
+kick_reason_prefix: "§c§l你已被踢出\n\n§f理由: "
+ban_reason_prefix: "§c§l你已被封禁\n\n§f理由: "
+
+# LinkCommand
+command_link_usage: "&c此命令仅限玩家执行。"
+link_already_linked: "&a✅ 已与 Discord 绑定。"
+link_how_to_unlink: "&7如需解绑: &f/unlink"
+link_not_linked: "&e❌ 未与 Discord 绑定。"
+link_instructions_header: "&7绑定步骤:"
+link_instructions_1: "&f1. 在 Discord 中运行 &e/link &f。"
+link_instructions_2: "&f2.在游戏中使用 &e/link <代码> &f输入代码。"
+link_success_title: "&a&l✅ 绑定成功！"
+link_success_message: "&a已与 Discord 账号绑定。"
+link_invalid_code: "&c无效的验证码。"
+link_code_expired: "&c验证码已过期。"
+link_reacquire_code: "&7请在 Discord 中重新运行 &f/link &7获取新代码。"
+command_usage_warnings: "&c用法: /warnings <玩家>"
+error_specify_player: "&c请指定一名玩家。"
+link_success_broadcast: "&a🔗 绑定完成 | **%player%** 已绑定其 Minecraft 账号。"
+
+# StorageManager Logs
+db_connected: "&a数据库连接成功: %type%"
+db_connection_failed: "&c数据库连接失败"
+db_h2_driver_not_found: "&cH2 驱动未找到"
+log_save_failed_kill: "&c保存战斗日志失败"
+log_load_failed_kill: "&c加载战斗日志失败"
+log_save_failed_jail: "&c保存禁闭数据失败"
+log_delete_failed_jail: "&c删除禁闭数据失败"
+log_load_failed_location: "&c加载原始位置失败"
+log_load_failed_inventory: "&c加载库存备份失败"
+log_load_failed_armor: "&c加载装备备份失败"
+log_check_failed_jail: "&c检查禁闭状态失败"
+log_save_failed_warn: "&c保存警告数据失败"
+log_load_failed_warn: "&c加载警告数据失败"
+log_clear_failed_warn: "&c清除警告失败"
+log_delete_failed_warn_last: "&c删除最新警告失败"
+log_cleanup_success: "&a已删除旧日志: %count% 条"
+log_cleanup_failed: "&c清除旧日志失败"
+db_closed: "&a数据库连接已关闭"
+db_close_failed: "&c关闭数据库连接失败"
+
+# RadioManager
+radio_not_joined: "&c你未加入无线电频道。使用 /radio <频率> 加入。"
+
+# PlaytimeManager
+time_format_days: "%d天 %d小时 %d分"
+time_format_hours: "%d小时 %d分"
+time_format_minutes: "%d分"
+playtime_save_failed: "&c保存游戏时间数据失败: %error%"
+playtime_load_success: "&a游戏时间数据已加载"
+playtime_load_failed: "&c加载游戏时间数据失败: %error%"
+
+# ExamQuestionManager
+exam_gui_title: "&6&l[考试题目]"
+exam_gui_lore: "&7---\n&7请在下方选择答案"
+exam_gui_click_to_answer: "&7点击回答"
+exam_answer_received: "&a已收到回答: &f%answer%"
+
+# Exam Templates (Q1-Q5)
+exam_q1_question: "敬礼的正确顺序是？"
+exam_q1_c1: "眼神接触 -> 敬礼 -> '忠诚！'"
+exam_q1_c2: "'忠诚！' -> 敬礼 -> 眼神接触"
+exam_q1_c3: "敬礼 -> 眼神接触 -> '忠诚！'"
+exam_q1_c4: "仅敬礼"
+
+exam_q2_question: "向上级说话前需要什么？"
+exam_q2_c1: "获得 PTS (发言许可)"
+exam_q2_c2: "敬礼"
+exam_q2_c3: "自我介绍"
+exam_q2_c4: "什么都不做"
+
+exam_q3_question: "如果你无法执行命令，正确的反应是？"
+exam_q3_c1: "说明理由并提出替代方案"
+exam_q3_c2: "默默忽略"
+exam_q3_c3: "当场抗议"
+exam_q3_c4: "推给其他士兵"
+
+exam_q4_question: "少尉属于哪一类？"
+exam_q4_c1: "军官"
+exam_q4_c2: "士官"
+exam_q4_c3: "士兵"
+exam_q4_c4: "准尉"
+
+exam_q5_question: "如果在战斗中发现受伤的战友，该怎么办？"
+exam_q5_c1: "呼叫医护兵"
+exam_q5_c2: "无视并继续战斗"
+exam_q5_c3: "独自救援"
+exam_q5_c4: "撤退"

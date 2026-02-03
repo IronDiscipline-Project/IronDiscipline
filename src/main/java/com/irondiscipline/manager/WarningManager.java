@@ -36,8 +36,9 @@ public class WarningManager {
                 // キャッシュ更新 (getWarningsで既に更新されているはずだが念のため)
                 int count = list.size();
 
-                // 自動処分チェック (メインスレッドに戻して実行)
-                Bukkit.getScheduler().runTask(plugin, () -> checkAutoPunish(playerId, count));
+                // 自動処分チェック (メインスレッド/グローバルに戻して実行)
+                // Folia対応: まずグローバルで実行し、プレイヤーが存在する場合はエンティティスケジュールに委譲
+                plugin.getTaskScheduler().runGlobal(() -> checkAutoPunish(playerId, count));
 
                 return count;
             });
@@ -46,14 +47,17 @@ public class WarningManager {
     private void checkAutoPunish(UUID playerId, int count) {
         Player target = Bukkit.getPlayer(playerId);
         if (target != null && target.isOnline()) {
-            int kickLimit = plugin.getConfigManager().getWarningKickThreshold();
-            int jailLimit = plugin.getConfigManager().getWarningJailThreshold();
+            // エンティティコンテキストで実行
+            plugin.getTaskScheduler().runEntity(target, () -> {
+                int kickLimit = plugin.getConfigManager().getWarningKickThreshold();
+                int jailLimit = plugin.getConfigManager().getWarningJailThreshold();
 
-            if (count >= kickLimit) {
-                target.kickPlayer("§c警告が" + kickLimit + "回に達したため、キックされました。");
-            } else if (count >= jailLimit) {
-                plugin.getJailManager().jail(target, null, "警告" + count + "回による自動隔離");
-            }
+                if (count >= kickLimit) {
+                    target.kickPlayer("§c警告が" + kickLimit + "回に達したため、キックされました。");
+                } else if (count >= jailLimit) {
+                    plugin.getJailManager().jail(target, null, "警告" + count + "回による自動隔離");
+                }
+            });
         }
     }
 

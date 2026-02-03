@@ -83,7 +83,7 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
 
     private void handleKick(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("§c使用法: /iron kick <プレイヤー> [理由]");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_usage_iron_kick"));
             return;
         }
         
@@ -94,15 +94,15 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
         }
         
         String reason = args.length > 2 ? String.join(" ", Arrays.copyOfRange(args, 2, args.length)) : "規律違反";
-        target.kickPlayer("§c§lキックされました\n\n§f理由: " + reason);
+        target.kickPlayer(plugin.getConfigManager().getRawMessage("kick_reason_prefix") + reason);
         
-        Bukkit.broadcastMessage("§c§l【通知】§r §f" + target.getName() + " §7がキックされました。理由: " + reason);
-        sender.sendMessage("§a" + target.getName() + " をキックした");
+        Bukkit.broadcastMessage(plugin.getConfigManager().getMessage("kick_broadcast", "%player%", target.getName(), "%reason%", reason));
+        sender.sendMessage(plugin.getConfigManager().getMessage("kick_success", "%player%", target.getName()));
     }
 
     private void handleBan(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("§c使用法: /iron ban <プレイヤー> [理由]");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_usage_iron_ban"));
             return;
         }
         
@@ -115,10 +115,10 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
         String reason = args.length > 2 ? String.join(" ", Arrays.copyOfRange(args, 2, args.length)) : "規律違反";
         
         Bukkit.getBanList(BanList.Type.NAME).addBan(target.getName(), reason, null, sender.getName());
-        target.kickPlayer("§c§lBANされました\n\n§f理由: " + reason);
+        target.kickPlayer(plugin.getConfigManager().getRawMessage("ban_reason_prefix") + reason);
         
-        Bukkit.broadcastMessage("§4§l【BAN】§r §f" + target.getName() + " §7がBANされました。理由: " + reason);
-        sender.sendMessage("§a" + target.getName() + " をBANした");
+        Bukkit.broadcastMessage(plugin.getConfigManager().getMessage("ban_broadcast", "%player%", target.getName(), "%reason%", reason));
+        sender.sendMessage(plugin.getConfigManager().getMessage("ban_success", "%player%", target.getName()));
     }
 
     private void handleTp(CommandSender sender, String[] args) {

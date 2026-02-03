@@ -41,7 +41,7 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
 
     private void handleWarn(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("§c使用法: /warn <プレイヤー> <理由>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_usage_warn"));
             return;
         }
 
@@ -66,7 +66,7 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
 
     private void executeWarn(CommandSender sender, OfflinePlayer target, String[] args) {
         if (!target.hasPlayedBefore() && !target.isOnline()) {
-            sender.sendMessage("§cプレイヤーが見つかりません (未参加の可能性)");
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found", "%player%", target.getName()));
             return;
         }
 
@@ -94,17 +94,17 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
         ).thenAccept(count -> {
             Bukkit.getScheduler().runTask(plugin, () -> {
                 // 通知
-                sender.sendMessage("§a" + target.getName() + " に警告を与えた（" + count + "回目）");
+                sender.sendMessage(plugin.getConfigManager().getMessage("warn_success", "%player%", target.getName(), "%count%", String.valueOf(count)));
 
                 if (target.isOnline() && target.getPlayer() != null) {
-                    target.getPlayer().sendMessage("§c§l【警告】§r§c " + reasonStr + " §7(警告" + count + "回目)");
+                    target.getPlayer().sendMessage(plugin.getConfigManager().getRawMessage("warn_received").replace("%reason%", reasonStr).replace("%count%", String.valueOf(count)));
                 }
 
                 // 自動処分の通知
                 if (count >= 5) {
-                    sender.sendMessage("§c" + target.getName() + " は警告5回でキックされた");
+                    sender.sendMessage(plugin.getConfigManager().getMessage("warn_kick_broadcast", "%player%", target.getName(), "%count%", String.valueOf(count)));
                 } else if (count >= 3) {
-                    sender.sendMessage("§e" + target.getName() + " は警告3回で隔離された");
+                    sender.sendMessage(plugin.getConfigManager().getMessage("warn_jail_broadcast", "%player%", target.getName(), "%count%", String.valueOf(count)));
                 }
             });
         });
@@ -123,27 +123,27 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
         } else if (sender instanceof Player) {
             showWarnings(sender, (Player) sender);
         } else {
-            sender.sendMessage("§cプレイヤーを指定してください");
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found", "%player%", "null"));
         }
     }
 
     private void showWarnings(CommandSender sender, OfflinePlayer target) {
         if (!target.hasPlayedBefore() && !target.isOnline()) {
-            sender.sendMessage("§cプレイヤーが見つかりません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("error_specify_player"));
             return;
         }
 
         plugin.getWarningManager().getWarnings(target.getUniqueId()).thenAccept(warnings -> {
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (warnings.isEmpty()) {
-                    sender.sendMessage("§a" + target.getName() + " には警告がありません");
+                    sender.sendMessage(plugin.getConfigManager().getMessage("warn_none", "%player%", target.getName()));
                     return;
                 }
 
-                sender.sendMessage("§6=== " + target.getName() + " の警告履歴 (" + warnings.size() + "件) ===");
+                sender.sendMessage(plugin.getConfigManager().getMessage("warn_history_header", "%player%", target.getName(), "%count%", String.valueOf(warnings.size())));
                 int i = 1;
                 for (WarningManager.Warning w : warnings) {
-                    sender.sendMessage("§7" + i + ". §f" + w.reason + " §8(" + w.getFormattedDate() + ")");
+                    sender.sendMessage(plugin.getConfigManager().getRawMessage("warn_history_entry").replace("%index%", String.valueOf(i)).replace("%reason%", w.reason).replace("%date%", w.getFormattedDate()));
                     i++;
                 }
             });
@@ -152,7 +152,7 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
 
     private void handleClearWarnings(CommandSender sender, String[] args) {
         if (args.length < 1) {
-            sender.sendMessage("§c使用法: /clearwarnings <プレイヤー>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_usage_clearwarnings"));
             return;
         }
 
@@ -167,20 +167,20 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
 
     private void executeClearWarnings(CommandSender sender, OfflinePlayer target) {
         if (!target.hasPlayedBefore() && !target.isOnline()) {
-            sender.sendMessage("§cプレイヤーが見つかりません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found", "%player%", target.getName()));
             return;
         }
 
         plugin.getWarningManager().clearWarnings(target.getUniqueId()).thenRun(() -> {
             Bukkit.getScheduler().runTask(plugin, () -> {
-                sender.sendMessage("§a" + target.getName() + " の警告をすべて削除した");
+                sender.sendMessage(plugin.getConfigManager().getMessage("warn_clear_success", "%player%", target.getName()));
             });
         });
     }
 
     private void handleUnwarn(CommandSender sender, String[] args) {
         if (args.length < 1) {
-            sender.sendMessage("§c使用法: /unwarn <プレイヤー>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_usage_unwarn"));
             return;
         }
 
@@ -195,16 +195,16 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
 
     private void executeUnwarn(CommandSender sender, OfflinePlayer target) {
         if (!target.hasPlayedBefore() && !target.isOnline()) {
-            sender.sendMessage("§cプレイヤーが見つかりません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found", "%player%", target.getName()));
             return;
         }
 
         plugin.getWarningManager().removeLastWarning(target.getUniqueId()).thenAccept(success -> {
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (success) {
-                    sender.sendMessage("§a" + target.getName() + " の最新の警告を削除した");
+                    sender.sendMessage(plugin.getConfigManager().getMessage("warn_remove_success", "%player%", target.getName()));
                 } else {
-                    sender.sendMessage("§c" + target.getName() + " には警告がありません");
+                    sender.sendMessage(plugin.getConfigManager().getMessage("warn_none", "%player%", target.getName()));
                 }
             });
         });
@@ -222,7 +222,7 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
                 if (plugin.getRankManager().getRank((Player) target)
                         .getWeight() >= com.irondiscipline.model.Rank.LIEUTENANT
                                 .getWeight()) {
-                    sender.sendMessage("§c憲兵は士官を警告できません");
+                    sender.sendMessage(plugin.getConfigManager().getMessage("warn_cannot_warn_officer"));
                     return false;
                 }
             }

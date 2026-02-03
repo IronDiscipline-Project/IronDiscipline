@@ -13,7 +13,7 @@
     <description>鉄の規律 - 軍事RP向け規律システムプラグイン</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -29,6 +29,10 @@
         <repository>
             <id>jda</id>
             <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>arim-repo</id>
+            <url>https://mvn-repo.arim.space/lesser-gpl3/</url>
         </repository>
     </repositories>
 
@@ -87,6 +91,12 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>5.10.0</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>space.arim.morepaperlib</groupId>
+            <artifactId>morepaperlib</artifactId>
+            <version>0.4.4</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

@@ -1,0 +1,155 @@
+prefix: "&8[&cIronDiscipline&8] "
+
+# Rang
+rank_promoted: "&a%player% wurde zum &f%rank%&a befördert."
+rank_demoted: "&e%player% wurde zum &f%rank%&e degradiert."
+rank_changed_self: "&aDein Rang wurde zu &f%rank%&a geändert."
+rank_already_max: "&cDu kannst nicht weiter befördert werden."
+rank_already_min: "&cDu kannst nicht weiter degradiert werden."
+
+# PTS (Erlaubnis zu sprechen)
+pts_granted: "&aSprecherlaubnis für %player% für &f%seconds% Sekunden&a erteilt."
+pts_received: "&aDu hast die Erlaubnis zu sprechen erhalten. Verbleibend: &f%seconds% Sekunden&a."
+pts_expired: "&eSprecherlaubnis ist abgelaufen."
+pts_required: "&cDu benötigst die Erlaubnis eines Vorgesetzten, um zu sprechen. Drücke zweimal Schleichen (Double Sneak), um PTS anzufordern."
+pts_request_sent: "&ePTS-Anfrage gesendet. Warte auf Erlaubnis."
+pts_request_notify: "&e%player% bittet um Sprecherlaubnis. &7/grant %player%"
+pts_request_timeout: "&cPTS-Anfrage Zeitüberschreitung. Bitte erneut anfordern."
+
+# Funk
+radio_joined: "&aFunkfrequenz &f%freq%&a beigetreten."
+radio_left: "&eFunk verlassen."
+radio_usage: "&cVerwendung: /radio <Frequenz> oder /radio off"
+
+# Gefängnis (Jail)
+jail_sent: "&c%player% wurde inhaftiert. Grund: %reason%"
+jail_released: "&a%player% wurde entlassen."
+jail_you_jailed: "&cDu wurdest inhaftiert. Grund: %reason%"
+jail_you_released: "&aDu wurdest entlassen. Kehre zum Dienst zurück."
+jail_not_set: "&cGefängnisstandort ist nicht gesetzt. Verwende /setjail."
+jail_location_set: "&aGefängnisstandort gesetzt."
+
+# Allgemein
+player_not_found: "&cSpieler nicht gefunden: %player%"
+no_permission: "&cDu hast keine Berechtigung."
+config_reloaded: "&aKonfiguration neu geladen."
+
+# Rangbeschränkungen
+rank_insufficient: "&cRang eines Unterleutnants oder höher erforderlich. Benötigt: {required}"
+rank_cannot_operate: "&cDu hast keine Berechtigung, {target} ({target_rank}) zu bearbeiten. Du kannst nur Ränge bearbeiten, die niedriger sind als deiner."
+
+# Konfigurierbare Strings
+pts_request_prefix: "&8[&ePTS-Anfrage&8]"
+radio_format: "&8[&bFunk %freq%&8] &7%rank% %player%&8: &f%message%"
+jail_blocked_message: "&cDu bist inhaftiert. Dir ist das Sprechen nicht gestattet."
+
+# WarnCommand
+command_usage_warn: "&cVerwendung: /warn <Spieler> <Grund>"
+warn_success: "&a%player% verwarnt (Anzahl: %count%)"
+warn_received: "&c&l[WARNUNG]&r&c %reason% &7(Warnung #%count%)"
+warn_kick_broadcast: "&c%player% wurde wegen %count% Verwarnungen gekickt."
+warn_jail_broadcast: "&e%player% wurde wegen %count% Verwarnungen inhaftiert."
+warn_none: "&a%player% hat keine Verwarnungen."
+warn_history_header: "&6=== Verwarnungsverlauf für %player% (%count%) ==="
+warn_history_entry: "&7%index%. &f%reason% &8(%date%)"
+command_usage_clearwarnings: "&cVerwendung: /clearwarnings <Spieler>"
+warn_clear_success: "&aAlle Verwarnungen für %player% gelöscht."
+command_usage_unwarn: "&cVerwendung: /unwarn <Spieler>"
+warn_remove_success: "&aLetzte Verwarnung für %player% entfernt."
+warn_cannot_warn_officer: "&cMilitärpolizei kann keine Offiziere verwarnen."
+
+# IronDisciplineCommand
+command_usage_iron_kick: "&cVerwendung: /iron kick <Spieler> [Grund]"
+kick_broadcast: "&c&l[HINWEIS]&r &f%player% &7wurde gekickt. Grund: %reason%"
+kick_success: "&a%player% gekickt."
+command_usage_iron_ban: "&cVerwendung: /iron ban <Spieler> [Grund]"
+ban_broadcast: "&4&l[BAN]&r &f%player% &7wurde GEBANNT. Grund: %reason%"
+ban_success: "&a%player% gebannt."
+kick_reason_prefix: "§c§lDu wurdest GEKICKT\n\n§fGrund: "
+ban_reason_prefix: "§c§lDu wurdest GEBANNT\n\n§fGrund: "
+
+# LinkCommand
+command_link_usage: "&cDieser Befehl kann nur von einem Spieler ausgeführt werden."
+link_already_linked: "&a✅ Bereits mit Discord verbunden."
+link_how_to_unlink: "&7Zum Trennen: &f/unlink"
+link_not_linked: "&e❌ Nicht mit Discord verbunden."
+link_instructions_header: "&7Zum Verbinden:"
+link_instructions_1: "&f1. Führe &e/link &fin Discord aus."
+link_instructions_2: "&f2. Gib den Code mit &e/link <Code> &fim Spiel ein."
+link_success_title: "&a&l✅ Verbindung erfolgreich!"
+link_success_message: "&aMit Discord-Konto verbunden."
+link_invalid_code: "&cUngültiger Bestätigungscode."
+link_code_expired: "&cBestätigungscode ist abgelaufen."
+link_reacquire_code: "&7Führe &f/link &7in Discord aus, um einen neuen Code zu erhalten."
+command_usage_warnings: "&cVerwendung: /warnings <Spieler>"
+error_specify_player: "&cBitte gib einen Spieler an."
+link_success_broadcast: "&a🔗 Verbindung abgeschlossen | **%player%** hat sein Minecraft-Konto verbunden."
+
+# StorageManager Logs
+db_connected: "&aDatenbankverbindung erfolgreich: %type%"
+db_connection_failed: "&cDatenbankverbindung fehlgeschlagen"
+db_h2_driver_not_found: "&cH2-Treiber nicht gefunden"
+log_save_failed_kill: "&cFehler beim Speichern des Kill-Logs"
+log_load_failed_kill: "&cFehler beim Laden der Kill-Logs"
+log_save_failed_jail: "&cFehler beim Speichern der Gefängnisdaten"
+log_delete_failed_jail: "&cFehler beim Löschen der Gefängnisdaten"
+log_load_failed_location: "&cFehler beim Laden des ursprünglichen Standorts"
+log_load_failed_inventory: "&cFehler beim Laden der Inventarsicherung"
+log_load_failed_armor: "&cFehler beim Laden der Rüstungssicherung"
+log_check_failed_jail: "&cFehler beim Prüfen des Gefängnisstatus"
+log_save_failed_warn: "&cFehler beim Speichern der Verwarnungsdaten"
+log_load_failed_warn: "&cFehler beim Laden der Verwarnungsdaten"
+log_clear_failed_warn: "&cFehler beim Löschen der Verwarnungen"
+log_delete_failed_warn_last: "&cFehler beim Löschen der letzten Verwarnung"
+log_cleanup_success: "&aAlte Logs gelöscht: %count%"
+log_cleanup_failed: "&cFehler beim Bereinigen alter Logs"
+db_closed: "&aDatenbankverbindung geschlossen"
+db_close_failed: "&cFehler beim Schließen der Datenbankverbindung"
+
+# RadioManager
+radio_not_joined: "&cDu bist in keiner Funkfrequenz. Tritt mit /radio <Frequenz> bei."
+
+# PlaytimeManager
+time_format_days: "%dT %dst %dm"
+time_format_hours: "%dst %dm"
+time_format_minutes: "%dm"
+playtime_save_failed: "&cFehler beim Speichern der Spielzeitdaten: %error%"
+playtime_load_success: "&aSpielzeitdaten geladen"
+playtime_load_failed: "&cFehler beim Laden der Spielzeitdaten: %error%"
+
+# ExamQuestionManager
+exam_gui_title: "&6&l[Prüfungsfragen]"
+exam_gui_lore: "&7---\n&7Wähle eine Antwort unten"
+exam_gui_click_to_answer: "&7Klicken zum Antworten"
+exam_answer_received: "&aAntwort erhalten: &f%answer%"
+
+# Exam Templates (Q1-Q5)
+exam_q1_question: "Was ist die korrekte Reihenfolge eines Saluts?"
+exam_q1_c1: "Augenkontakt -> Salutieren -> 'Treue!'"
+exam_q1_c2: "'Treue!' -> Salutieren -> Augenkontakt"
+exam_q1_c3: "Salutieren -> Augenkontakt -> 'Treue!'"
+exam_q1_c4: "Nur Salutieren"
+
+exam_q2_question: "Was ist erforderlich, bevor man einen Vorgesetzten anspricht?"
+exam_q2_c1: "PTS (Sprecherlaubnis) erhalten"
+exam_q2_c2: "Salutieren"
+exam_q2_c3: "Sich vorstellen"
+exam_q2_c4: "Nichts tun"
+
+exam_q3_question: "Was ist die richtige Reaktion, wenn man einen Befehl nicht ausführen kann?"
+exam_q3_c1: "Grund nennen und Alternative vorschlagen"
+exam_q3_c2: "Still ignorieren"
+exam_q3_c3: "Sofort protestieren"
+exam_q3_c4: "Auf einen anderen Soldaten schieben"
+
+exam_q4_question: "In welche Kategorie fällt ein Unterleutnant?"
+exam_q4_c1: "Offizier"
+exam_q4_c2: "Unteroffizier"
+exam_q4_c3: "Mannschaft"
+exam_q4_c4: "Fachoffizier"
+
+exam_q5_question: "Was solltest du tun, wenn du im Kampf einen verwundeten Kameraden findest?"
+exam_q5_c1: "Sanitäter rufen"
+exam_q5_c2: "Ignorieren und weiterkämpfen"
+exam_q5_c3: "Alleine retten"
+exam_q5_c4: "Zurückziehen"

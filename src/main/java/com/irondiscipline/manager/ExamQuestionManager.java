@@ -31,7 +31,9 @@ public class ExamQuestionManager implements Listener {
     // 問題テンプレート
     private final List<QuestionTemplate> templates = new ArrayList<>();
     
-    private static final String GUI_TITLE = "§6§l【試験問題】";
+    private String getGuiTitle() {
+        return plugin.getConfigManager().getMessage("exam_gui_title");
+    }
 
     public ExamQuestionManager(IronDiscipline plugin) {
         this.plugin = plugin;
@@ -43,41 +45,17 @@ public class ExamQuestionManager implements Listener {
      * 問題テンプレートを初期化
      */
     private void initTemplates() {
-        // テンプレート1: 一般知識
-        templates.add(new QuestionTemplate(
-            "敬礼の正しい順序は？",
-            Arrays.asList("目を合わせる → 敬礼 → 「忠誠！」", "「忠誠！」→ 敬礼 → 目を合わせる", 
-                          "敬礼 → 目を合わせる → 「忠誠！」", "敬礼のみ"),
-            "A"
-        ));
-        
-        // テンプレート2: 規律
-        templates.add(new QuestionTemplate(
-            "上官に話しかける前に必要なのは？",
-            Arrays.asList("PTS（発言許可）を得る", "敬礼する", "自己紹介する", "何もしない"),
-            "A"
-        ));
-        
-        // テンプレート3: 命令
-        templates.add(new QuestionTemplate(
-            "命令に従えない場合の正しい対応は？",
-            Arrays.asList("理由を述べて代替案を提案", "黙って無視する", "その場で抗議する", "他の兵士に押し付ける"),
-            "A"
-        ));
-        
-        // テンプレート4: 階級
-        templates.add(new QuestionTemplate(
-            "少尉は何に分類されるか？",
-            Arrays.asList("士官", "下士官", "兵卒", "准士官"),
-            "A"
-        ));
-        
-        // テンプレート5: 行動規範
-        templates.add(new QuestionTemplate(
-            "戦闘中に負傷した同僚を発見した場合は？",
-            Arrays.asList("衛生兵を呼ぶ", "無視して戦闘を続ける", "一人で救助する", "撤退する"),
-            "A"
-        ));
+        for (int i = 1; i <= 5; i++) {
+            List<String> choices = new ArrayList<>();
+            for (int j = 1; j <= 4; j++) {
+                choices.add(plugin.getConfigManager().getRawMessage("exam_q" + i + "_c" + j));
+            }
+            templates.add(new QuestionTemplate(
+                plugin.getConfigManager().getRawMessage("exam_q" + i + "_question"),
+                choices,
+                "A" // All templates in previous code had "A" as correct.
+            ));
+        }
     }
 
     /**
@@ -124,13 +102,13 @@ public class ExamQuestionManager implements Listener {
      * 問題GUIを開く
      */
     private void openQuestionGUI(Player player, ExamQuestion question) {
-        Inventory inv = Bukkit.createInventory(null, 27, GUI_TITLE);
+        Inventory inv = Bukkit.createInventory(null, 27, getGuiTitle());
         
         // 問題文（本）
         ItemStack questionItem = new ItemStack(Material.BOOK);
         ItemMeta qMeta = questionItem.getItemMeta();
         qMeta.setDisplayName("§e§l" + question.question);
-        qMeta.setLore(Arrays.asList("§7---", "§7下の選択肢から回答を選んでください"));
+        qMeta.setLore(Arrays.asList(plugin.getConfigManager().getRawMessage("exam_gui_lore").split("\n")));
         questionItem.setItemMeta(qMeta);
         inv.setItem(4, questionItem);
         
@@ -143,7 +121,7 @@ public class ExamQuestionManager implements Listener {
             ItemStack choice = new ItemStack(colors[i]);
             ItemMeta cMeta = choice.getItemMeta();
             cMeta.setDisplayName("§f§l" + labels[i] + ". " + question.choices.get(i));
-            cMeta.setLore(Arrays.asList("§7クリックして回答"));
+            cMeta.setLore(Arrays.asList(plugin.getConfigManager().getRawMessage("exam_gui_click_to_answer")));
             choice.setItemMeta(cMeta);
             inv.setItem(slots[i], choice);
         }
@@ -153,7 +131,7 @@ public class ExamQuestionManager implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!event.getView().getTitle().equals(GUI_TITLE)) return;
+        if (!event.getView().getTitle().equals(getGuiTitle())) return;
         
         event.setCancelled(true);
         
@@ -171,7 +149,7 @@ public class ExamQuestionManager implements Listener {
         if (answer != null) {
             playerAnswers.put(player.getUniqueId(), answer);
             player.closeInventory();
-            player.sendMessage("§a回答を受け付けました: §f" + answer);
+            player.sendMessage(plugin.getConfigManager().getMessage("exam_answer_received", "%answer%", answer));
         }
     }
 

@@ -23,20 +23,20 @@ public class LinkCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("§cこのコマンドはプレイヤーのみ実行可能");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_link_usage"));
             return true;
         }
 
         if (args.length < 1) {
             // 連携状況確認
             if (plugin.getLinkManager().isLinked(player.getUniqueId())) {
-                sender.sendMessage("§a✅ Discordと連携済みです");
-                sender.sendMessage("§7連携を解除するには: §f/unlink");
+                sender.sendMessage(plugin.getConfigManager().getMessage("link_already_linked"));
+                sender.sendMessage(plugin.getConfigManager().getMessage("link_how_to_unlink"));
             } else {
-                sender.sendMessage("§e❌ Discordと未連携です");
-                sender.sendMessage("§7連携するには:");
-                sender.sendMessage("§f1. Discordで §e/link §fを実行");
-                sender.sendMessage("§f2. 表示されたコードを §e/link <コード> §fで入力");
+                sender.sendMessage(plugin.getConfigManager().getMessage("link_not_linked"));
+                sender.sendMessage(plugin.getConfigManager().getMessage("link_instructions_header"));
+                sender.sendMessage(plugin.getConfigManager().getMessage("link_instructions_1"));
+                sender.sendMessage(plugin.getConfigManager().getMessage("link_instructions_2"));
             }
             return true;
         }
@@ -46,8 +46,8 @@ public class LinkCommand implements CommandExecutor {
 
         switch (result) {
             case SUCCESS -> {
-                player.sendMessage("§a§l✅ 連携成功！");
-                player.sendMessage("§aDiscordアカウントと連携しました。");
+                player.sendMessage(plugin.getConfigManager().getMessage("link_success_title"));
+                player.sendMessage(plugin.getConfigManager().getMessage("link_success_message"));
                 
                 // Discord側ロール・ニックネーム変更
                 Long discordId = plugin.getLinkManager().getDiscordId(player.getUniqueId());
@@ -57,18 +57,18 @@ public class LinkCommand implements CommandExecutor {
                     
                     plugin.getDiscordManager().sendNotification(
                         "🔗 連携完了", 
-                        "**" + player.getName() + "** がMinecraftアカウントと連携しました",
+                        plugin.getConfigManager().getRawMessage("link_success_broadcast").replace("%player%", player.getName()),
                         java.awt.Color.GREEN
                     );
                 }
             }
             case INVALID_CODE -> {
-                player.sendMessage("§c無効な認証コードです。");
-                player.sendMessage("§7Discordで §f/link §7を実行して新しいコードを取得してください。");
+                player.sendMessage(plugin.getConfigManager().getMessage("link_invalid_code"));
+                player.sendMessage(plugin.getConfigManager().getMessage("link_reacquire_code"));
             }
             case EXPIRED -> {
-                player.sendMessage("§c認証コードの有効期限が切れています。");
-                player.sendMessage("§7Discordで §f/link §7を再実行してください。");
+                player.sendMessage(plugin.getConfigManager().getMessage("link_code_expired"));
+                player.sendMessage(plugin.getConfigManager().getMessage("link_reacquire_code"));
             }
         }
 

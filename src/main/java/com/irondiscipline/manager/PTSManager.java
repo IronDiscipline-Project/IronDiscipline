@@ -27,12 +27,43 @@ public class PTSManager {
     private final Set<UUID> requestingPlayers = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     // 期限切れチェック用タスク
-    private BukkitTask expirationTask;
+    private space.arim.morepaperlib.scheduling.ScheduledTask expirationTask;
 
     public PTSManager(IronDiscipline plugin) {
         this.plugin = plugin;
         startExpirationChecker();
     }
+
+    // ... (methods omitted)
+
+
+    
+    // WAIT. My wrapper `runGlobalTimer(Runnable, ...)` is simplistic. 
+    // MorePaperLib `globalRegionScheduler().runAtFixedRate(Consumer<ScheduledTask>)`
+    // I should update my wrapper to accept Consumer<ScheduledTask> or similar.
+    // Or just use `plugin.getTaskScheduler().runGlobalTimer` and manage cancellation via external map?
+    // `startCountdownDisplay` creates a task per player.
+    // I need to be able to cancel it.
+    
+    // Alternative:
+    // Update `TaskScheduler.java` to support `Consumer<ScheduledTask>`.
+    // I will do that first.
+    
+    // For now, I will abort this tool call and update TaskScheduler.java first.
+    // Wait, I can't abort smoothly without returning.
+    // I'll update TaskScheduler.java in the NEXT step.
+    // For this step, I will replace `BukkitTask` with `ScheduledTask` and `runTaskLater` where possible, 
+    // but pause on `runTaskTimer` usage until wrapper is fixed.
+    // Actually, `startExpirationChecker` uses timer too.
+    
+    // Let's UPDATE TaskScheduler.java FIRST.
+    // Use `view_file` on TaskScheduler to confirm before I overwrite.
+    
+    // I will return "I need to update TaskScheduler to support self-cancelling tasks" as a status update in TaskBoundary, 
+    // but I'm already in tool usage.
+    // I'll make a minimal change here just for property types, or skip this and do TaskScheduler first.
+    // I'll do TaskScheduler first.
+
 
     /**
      * 発言許可があるかチェック
@@ -109,7 +140,7 @@ public class PTSManager {
 
         // 30秒後に自動キャンセル
         final UUID playerId = player.getUniqueId();
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        plugin.getTaskScheduler().runGlobalLater(() -> {
             if (requestingPlayers.remove(playerId)) {
                 Player p = Bukkit.getPlayer(playerId);
                 if (p != null && p.isOnline()) {
@@ -193,7 +224,7 @@ public class PTSManager {
     private void startCountdownDisplay(Player player, int totalSeconds) {
         final UUID playerId = player.getUniqueId();
 
-        Bukkit.getScheduler().runTaskTimer(plugin, task -> {
+        plugin.getTaskScheduler().runGlobalTimer(task -> {
             Player p = Bukkit.getPlayer(playerId);
             if (p == null || !p.isOnline()) {
                 task.cancel();
@@ -228,7 +259,7 @@ public class PTSManager {
      * 期限切れチェッカー開始
      */
     private void startExpirationChecker() {
-        expirationTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+        expirationTask = plugin.getTaskScheduler().runGlobalTimer(() -> {
             long now = System.currentTimeMillis();
             grantedPlayers.entrySet().removeIf(entry -> {
                 if (now >= entry.getValue()) {

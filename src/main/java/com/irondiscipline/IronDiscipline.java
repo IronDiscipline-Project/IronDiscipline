@@ -37,6 +37,7 @@ public class IronDiscipline extends JavaPlugin {
     private AutoPromotionManager autoPromotionManager;
 
     // Utilities
+    private com.irondiscipline.util.TaskScheduler taskScheduler;
     private RankUtil rankUtil;
 
     // LuckPerms API
@@ -136,6 +137,7 @@ public class IronDiscipline extends JavaPlugin {
         this.discordManager = new DiscordManager(this);
         this.autoPromotionManager = new AutoPromotionManager(this, rankManager);
         this.rankUtil = new RankUtil(this);
+        this.taskScheduler = new com.irondiscipline.util.TaskScheduler(this);
 
         // Start auto-promotion task
         this.autoPromotionManager.startTask();
@@ -285,5 +287,9 @@ public class IronDiscipline extends JavaPlugin {
 
     public LuckPerms getLuckPerms() {
         return luckPerms;
+    }
+
+    public com.irondiscipline.util.TaskScheduler getTaskScheduler() {
+        return taskScheduler;
     }
 }

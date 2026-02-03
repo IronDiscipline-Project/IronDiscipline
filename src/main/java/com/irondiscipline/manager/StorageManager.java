@@ -51,9 +51,9 @@ public class StorageManager {
                 initH2();
             }
             createTables();
-            plugin.getLogger().info("データベース接続成功: " + dbType.toUpperCase());
+            plugin.getLogger().info(plugin.getConfigManager().getRawMessage("db_connected").replace("%type%", dbType.toUpperCase()));
         } catch (Exception e) {
-            plugin.getLogger().log(Level.SEVERE, "データベース接続失敗", e);
+            plugin.getLogger().log(Level.SEVERE, plugin.getConfigManager().getRawMessage("db_connection_failed"), e);
         }
     }
 
@@ -66,7 +66,7 @@ public class StorageManager {
             try {
                 Class.forName("org.h2.Driver");
             } catch (ClassNotFoundException e2) {
-                throw new SQLException("H2ドライバーが見つかりません", e2);
+                throw new SQLException(plugin.getConfigManager().getRawMessage("db_h2_driver_not_found"), e2);
             }
         }
 
@@ -163,7 +163,7 @@ public class StorageManager {
             try {
                 saveKillLog(log);
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "戦闘ログ保存失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_save_failed_kill"), e);
             }
         }, dbExecutor);
     }
@@ -198,7 +198,7 @@ public class StorageManager {
             try {
                 return getKillLogs(playerId, limit);
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "戦闘ログ取得失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_load_failed_kill"), e);
                 return new ArrayList<>();
             }
         }, dbExecutor);
@@ -234,7 +234,7 @@ public class StorageManager {
             try {
                 return getAllKillLogs(limit);
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "戦闘ログ取得失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_load_failed_kill"), e);
                 return new ArrayList<>();
             }
         }, dbExecutor);
@@ -322,7 +322,7 @@ public class StorageManager {
                     return true;
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "隔離データ保存失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_save_failed_jail"), e);
                 return false;
             }
         }, dbExecutor);
@@ -367,7 +367,7 @@ public class StorageManager {
                     locationCache.remove(playerId);
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "隔離データ削除失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_delete_failed_jail"), e);
             }
         }, dbExecutor);
     }
@@ -428,7 +428,7 @@ public class StorageManager {
                     }
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "元座標取得失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_load_failed_location"), e);
             }
             return null;
         }, dbExecutor);
@@ -471,7 +471,7 @@ public class StorageManager {
                     }
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "インベントリバックアップ取得失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_load_failed_inventory"), e);
             }
             return null;
         }, dbExecutor);
@@ -514,7 +514,7 @@ public class StorageManager {
                     }
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "装備バックアップ取得失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_load_failed_armor"), e);
             }
             return null;
         }, dbExecutor);
@@ -543,7 +543,7 @@ public class StorageManager {
                     }
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "隔離確認失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_check_failed_jail"), e);
             }
             return false;
         }, dbExecutor);
@@ -564,7 +564,7 @@ public class StorageManager {
                     ps.executeUpdate();
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "警告データ保存失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_save_failed_warn"), e);
             }
         });
     }
@@ -587,7 +587,7 @@ public class StorageManager {
                     }
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "警告データ取得失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_load_failed_warn"), e);
             }
             return warnings;
         }, dbExecutor);
@@ -602,7 +602,7 @@ public class StorageManager {
                     ps.executeUpdate();
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "警告クリア失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_clear_failed_warn"), e);
             }
         }, dbExecutor);
     }
@@ -630,7 +630,7 @@ public class StorageManager {
                     }
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "最新警告削除失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_delete_failed_warn_last"), e);
             }
         }, dbExecutor);
     }
@@ -649,11 +649,11 @@ public class StorageManager {
                     ps.setLong(1, cutoff);
                     int deleted = ps.executeUpdate();
                     if (deleted > 0) {
-                        plugin.getLogger().info("古い戦闘ログを削除: " + deleted + "件");
+                        plugin.getLogger().info(plugin.getConfigManager().getRawMessage("log_cleanup_success").replace("%count%", String.valueOf(deleted)));
                     }
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "古いログ削除失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_cleanup_failed"), e);
             }
         });
     }
@@ -665,9 +665,9 @@ public class StorageManager {
         if (connection != null) {
             try {
                 connection.close();
-                plugin.getLogger().info("データベース接続を閉じました");
+                plugin.getLogger().info(plugin.getConfigManager().getRawMessage("db_closed"));
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "データベース切断失敗", e);
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("db_close_failed"), e);
             }
         }
         dbExecutor.shutdown();

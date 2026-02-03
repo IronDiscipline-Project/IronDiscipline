@@ -60,7 +60,7 @@ public class JailManager {
                 jailer != null ? jailer.getUniqueId() : null, locString, invBackup, armorBackup)
                 .thenAccept(success -> {
                     if (success) {
-                        Bukkit.getScheduler().runTask(plugin, () -> {
+                        plugin.getTaskScheduler().runEntity(target, () -> {
                             // DB保存成功後にインベントリ操作とテレポート
                             if (!target.isOnline())
                                 return;
@@ -139,7 +139,7 @@ public class JailManager {
         // インベントリ復元 (DBから非同期取得)
         plugin.getStorageManager().getInventoryBackupAsync(targetId).thenAccept(invData -> {
             plugin.getStorageManager().getArmorBackupAsync(targetId).thenAccept(armorData -> {
-                Bukkit.getScheduler().runTask(plugin, () -> {
+                plugin.getTaskScheduler().runEntity(target, () -> {
                     if (invData != null) {
                         ItemStack[] items = InventoryUtil.fromBase64(invData);
                         if (items != null) {
@@ -156,7 +156,7 @@ public class JailManager {
 
                     // DB削除 (非同期)
                     plugin.getStorageManager().removeJailedPlayerAsync(targetId).thenRun(() -> {
-                        Bukkit.getScheduler().runTask(plugin, () -> {
+                        plugin.getTaskScheduler().runEntity(target, () -> {
                             // 通知 (DB削除完了後)
                             target.sendMessage(plugin.getConfigManager().getMessage("jail_you_released"));
                         });
@@ -198,7 +198,7 @@ public class JailManager {
         plugin.getStorageManager().isJailedAsync(playerId).thenAccept(isJailed -> {
             if (!isJailed) {
                 // 隔離中でなければ元のモードに復元
-                Bukkit.getScheduler().runTask(plugin, () -> {
+                plugin.getTaskScheduler().runEntity(player, () -> {
                     if (player.isOnline()) {
                         player.setGameMode(originalMode);
                     }
@@ -210,7 +210,7 @@ public class JailManager {
             plugin.getStorageManager().getInventoryBackupAsync(playerId).thenAccept(invBackup -> {
                 // 元座標も非同期で取得
                 plugin.getStorageManager().getOriginalLocationAsync(playerId).thenAccept(savedOriginalLoc -> {
-                    Bukkit.getScheduler().runTask(plugin, () -> {
+                    plugin.getTaskScheduler().runEntity(player, () -> {
                         if (!player.isOnline())
                             return;
 

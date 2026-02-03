@@ -15,7 +15,7 @@ public class AutoPromotionManager {
 
     private final IronDiscipline plugin;
     private final RankManager rankManager;
-    private BukkitTask task;
+    private space.arim.morepaperlib.scheduling.ScheduledTask task;
 
     public AutoPromotionManager(IronDiscipline plugin, RankManager rankManager) {
         this.plugin = plugin;
@@ -34,7 +34,7 @@ public class AutoPromotionManager {
 
         int intervalSeconds = plugin.getConfigManager().getTimeBasedPromotionInterval();
 
-        task = Bukkit.getScheduler().runTaskTimer(plugin, this::checkPromotions, intervalSeconds * 20L,
+        task = plugin.getTaskScheduler().runGlobalTimer(() -> checkPromotions(), intervalSeconds * 20L,
                 intervalSeconds * 20L);
     }
 

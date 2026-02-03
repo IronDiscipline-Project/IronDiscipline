@@ -84,7 +84,8 @@ public class RankManager {
                 rankCache.put(player.getUniqueId(), newRank);
 
                 // Tab/ネームタグ即時更新 (メインスレッドで行うことを保証)
-                Bukkit.getScheduler().runTask(plugin, () -> {
+                // Tab/ネームタグ即時更新 (メインスレッドで行うことを保証)
+                plugin.getTaskScheduler().runEntity(player, () -> {
                     if (!player.isOnline())
                         return;
 
@@ -178,7 +179,7 @@ public class RankManager {
         // オンラインならTab更新
         Player player = Bukkit.getPlayer(playerId);
         if (player != null && player.isOnline()) {
-            Bukkit.getScheduler().runTask(plugin, () -> {
+            plugin.getTaskScheduler().runEntity(player, () -> {
                 Rank rank = fetchRankFromLuckPerms(player);
                 rankCache.put(playerId, rank);
                 TabNametagUtil.updatePlayer(player, rank);

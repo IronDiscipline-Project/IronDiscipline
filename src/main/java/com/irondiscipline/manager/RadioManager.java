@@ -88,7 +88,7 @@ public class RadioManager {
         String frequency = playerFrequencies.get(senderId);
         
         if (frequency == null) {
-            sender.sendMessage(ChatColor.RED + "無線に参加していない。/radio <周波数> で参加せよ。");
+            sender.sendMessage(plugin.getConfigManager().getMessage("radio_not_joined"));
             return;
         }
         
