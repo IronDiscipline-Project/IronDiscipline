@@ -3,6 +3,7 @@ package com.irondiscipline.command;
 import com.irondiscipline.IronDiscipline;
 import org.bukkit.Bukkit;
 import org.bukkit.BanList;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -61,11 +62,11 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
                 sender.sendMessage(plugin.getConfigManager().getMessage("config_reloaded"));
             }
             case "version", "ver" -> {
-                sender.sendMessage("§6鉄の規律 (IronDiscipline) v" + plugin.getDescription().getVersion());
+                sender.sendMessage(plugin.getConfigManager().getMessage("command_iron_version", "%version%", plugin.getDescription().getVersion()));
             }
             case "cleanup" -> {
                 plugin.getStorageManager().cleanupOldLogs();
-                sender.sendMessage("§a古いログの削除を開始した。");
+                sender.sendMessage(plugin.getConfigManager().getMessage("command_iron_cleanup_started"));
             }
             // Adonis風コマンド
             case "kick" -> handleKick(sender, args);
@@ -89,7 +90,7 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
         
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage("§cプレイヤーが見つかりません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found_simple"));
             return;
         }
         
@@ -108,7 +109,7 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
         
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage("§cプレイヤーが見つかりません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found_simple"));
             return;
         }
         
@@ -123,87 +124,87 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
 
     private void handleTp(CommandSender sender, String[] args) {
         if (!(sender instanceof Player executor)) {
-            sender.sendMessage("§cこのコマンドはプレイヤーのみ実行可能");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_player_only"));
             return;
         }
         
         if (args.length < 2) {
-            sender.sendMessage("§c使用法: /iron tp <プレイヤー>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_iron_tp_usage"));
             return;
         }
         
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage("§cプレイヤーが見つかりません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found_simple"));
             return;
         }
         
         executor.teleport(target.getLocation());
-        sender.sendMessage("§a" + target.getName() + " にテレポートした");
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_tp_success", "%player%", target.getName()));
     }
 
     private void handleBring(CommandSender sender, String[] args) {
         if (!(sender instanceof Player executor)) {
-            sender.sendMessage("§cこのコマンドはプレイヤーのみ実行可能");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_player_only"));
             return;
         }
         
         if (args.length < 2) {
-            sender.sendMessage("§c使用法: /iron bring <プレイヤー>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_iron_bring_usage"));
             return;
         }
         
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage("§cプレイヤーが見つかりません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found_simple"));
             return;
         }
         
         target.teleport(executor.getLocation());
-        sender.sendMessage("§a" + target.getName() + " を呼び出した");
-        target.sendMessage("§e上官によって呼び出されました");
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_bring_success_sender", "%player%", target.getName()));
+        target.sendMessage(plugin.getConfigManager().getMessage("iron_bring_success_target"));
     }
 
     private void handleFreeze(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("§c使用法: /iron freeze <プレイヤー>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_iron_freeze_usage"));
             return;
         }
         
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage("§cプレイヤーが見つかりません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found_simple"));
             return;
         }
         
         frozenPlayers.add(target.getUniqueId());
-        sender.sendMessage("§a" + target.getName() + " を凍結した");
-        target.sendMessage("§c§l【凍結】§r§c 移動が禁止されました");
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_freeze_success_sender", "%player%", target.getName()));
+        target.sendMessage(plugin.getConfigManager().getMessage("iron_freeze_success_target"));
     }
 
     private void handleUnfreeze(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("§c使用法: /iron unfreeze <プレイヤー>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_iron_unfreeze_usage"));
             return;
         }
         
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage("§cプレイヤーが見つかりません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found_simple"));
             return;
         }
         
         if (frozenPlayers.remove(target.getUniqueId())) {
-            sender.sendMessage("§a" + target.getName() + " の凍結を解除した");
-            target.sendMessage("§a凍結が解除されました");
+            sender.sendMessage(plugin.getConfigManager().getMessage("iron_unfreeze_success_sender", "%player%", target.getName()));
+            target.sendMessage(plugin.getConfigManager().getMessage("iron_unfreeze_success_target"));
         } else {
-            sender.sendMessage("§c" + target.getName() + " は凍結されていません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("iron_not_frozen", "%player%", target.getName()));
         }
     }
 
     private void handleAnnounce(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("§c使用法: /iron announce <メッセージ>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_iron_announce_usage"));
             return;
         }
         
@@ -211,26 +212,26 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
         
         // タイトル表示と全体ブロードキャスト
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendTitle("§6§l【通達】", "§f" + message, 10, 100, 20);
-            p.sendMessage("§6§l【通達】§r §f" + message);
+            p.sendTitle(plugin.getConfigManager().getRawMessage("iron_announce_title"), ChatColor.WHITE + message, 10, 100, 20);
+            p.sendMessage(plugin.getConfigManager().getMessage("iron_announce_chat", "%message%", message));
         }
         
-        sender.sendMessage("§aアナウンスを送信した");
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_announce_sent"));
     }
 
     private void showHelp(CommandSender sender) {
-        sender.sendMessage("§6===== 鉄の規律 コマンド =====");
-        sender.sendMessage("§e/iron reload §7- 設定をリロード");
-        sender.sendMessage("§e/iron version §7- バージョン表示");
-        sender.sendMessage("§e/iron cleanup §7- 古いログを削除");
-        sender.sendMessage("§6----- 管理コマンド -----");
-        sender.sendMessage("§e/iron kick <player> [理由] §7- キック");
-        sender.sendMessage("§e/iron ban <player> [理由] §7- BAN");
-        sender.sendMessage("§e/iron tp <player> §7- テレポート");
-        sender.sendMessage("§e/iron bring <player> §7- 呼び出し");
-        sender.sendMessage("§e/iron freeze <player> §7- 凍結");
-        sender.sendMessage("§e/iron unfreeze <player> §7- 解凍");
-        sender.sendMessage("§e/iron announce <msg> §7- 全体通達");
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_header"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_reload"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_version"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_cleanup"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_admin_header"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_kick"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_ban"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_tp"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_bring"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_freeze"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_unfreeze"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_announce"));
     }
 
     @Override

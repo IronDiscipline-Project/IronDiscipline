@@ -32,7 +32,7 @@ public class UnjailCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length < 1) {
-            sender.sendMessage("§c使用法: /unjail <プレイヤー名>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_unjail_usage"));
             return true;
         }
 
@@ -52,7 +52,7 @@ public class UnjailCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(plugin.getConfigManager().getMessage("jail_released",
                 "%player%", target.getName()));
         } else {
-            sender.sendMessage("§cこのプレイヤーは拘留されていない。");
+            sender.sendMessage(plugin.getConfigManager().getMessage("unjail_not_jailed"));
         }
 
         return true;

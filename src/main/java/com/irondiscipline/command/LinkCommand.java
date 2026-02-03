@@ -56,7 +56,7 @@ public class LinkCommand implements CommandExecutor {
                     plugin.getDiscordManager().onLinkComplete(discordId, player.getName(), rank);
                     
                     plugin.getDiscordManager().sendNotification(
-                        "🔗 連携完了", 
+                        plugin.getConfigManager().getRawMessage("link_success_notification_title"),
                         plugin.getConfigManager().getRawMessage("link_success_broadcast").replace("%player%", player.getName()),
                         java.awt.Color.GREEN
                     );

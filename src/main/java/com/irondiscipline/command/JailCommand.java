@@ -32,7 +32,7 @@ public class JailCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length < 1) {
-            sender.sendMessage("§c使用法: /jail <プレイヤー名> [理由]");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_jail_usage"));
             return true;
         }
 
@@ -46,7 +46,7 @@ public class JailCommand implements CommandExecutor, TabCompleter {
         }
 
         // 理由（オプション）
-        String reason = "理由なし";
+        String reason = plugin.getConfigManager().getRawMessage("jail_reason_default");
         if (args.length >= 2) {
             StringBuilder sb = new StringBuilder();
             for (int i = 1; i < args.length; i++) {
@@ -80,7 +80,7 @@ public class JailCommand implements CommandExecutor, TabCompleter {
                     "%player%", target != null ? target.getName() : targetName,
                     "%reason%", reason));
         } else {
-            sender.sendMessage("§c隔離に失敗した。既に隔離中か、設定エラーの可能性ある。");
+            sender.sendMessage(plugin.getConfigManager().getMessage("jail_failed"));
         }
 
         return true;
@@ -97,9 +97,9 @@ public class JailCommand implements CommandExecutor, TabCompleter {
                 }
             }
         } else if (args.length == 2) {
-            completions.add("規律違反");
-            completions.add("命令無視");
-            completions.add("不正行為");
+            completions.add(plugin.getConfigManager().getRawMessage("jail_reason_suggestion_1"));
+            completions.add(plugin.getConfigManager().getRawMessage("jail_reason_suggestion_2"));
+            completions.add(plugin.getConfigManager().getRawMessage("jail_reason_suggestion_3"));
         }
         return completions;
     }

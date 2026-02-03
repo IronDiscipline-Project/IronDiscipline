@@ -54,13 +54,13 @@ public class DivisionCommand implements CommandExecutor, TabCompleter {
 
     private void handleSet(CommandSender sender, String[] args) {
         if (args.length < 3) {
-            sender.sendMessage("§c使用法: /division set <プレイヤー> <部隊>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_division_set_usage"));
             return;
         }
 
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage("§cプレイヤーが見つかりません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found_simple"));
             return;
         }
 
@@ -68,35 +68,40 @@ public class DivisionCommand implements CommandExecutor, TabCompleter {
         plugin.getDivisionManager().setDivision(target.getUniqueId(), division);
         
         String displayName = plugin.getDivisionManager().getDivisionDisplayName(division);
-        sender.sendMessage("§a" + target.getName() + " を " + displayName + " §aに配属した");
-        target.sendMessage("§e" + displayName + " §eに配属されました");
+        sender.sendMessage(plugin.getConfigManager().getMessage("division_set_sender",
+            "%player%", target.getName(),
+            "%division%", displayName));
+        target.sendMessage(plugin.getConfigManager().getMessage("division_set_target",
+            "%division%", displayName));
     }
 
     private void handleRemove(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("§c使用法: /division remove <プレイヤー>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_division_remove_usage"));
             return;
         }
 
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage("§cプレイヤーが見つかりません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found_simple"));
             return;
         }
 
         plugin.getDivisionManager().removeDivision(target.getUniqueId());
-        sender.sendMessage("§a" + target.getName() + " の部隊配属を解除した");
-        target.sendMessage("§e部隊配属が解除されました");
+        sender.sendMessage(plugin.getConfigManager().getMessage("division_remove_sender", "%player%", target.getName()));
+        target.sendMessage(plugin.getConfigManager().getMessage("division_remove_target"));
     }
 
     private void handleList(CommandSender sender) {
         Set<String> divisions = plugin.getDivisionManager().getAllDivisions();
         
-        sender.sendMessage("§6=== 部隊一覧 ===");
+        sender.sendMessage(plugin.getConfigManager().getMessage("division_list_header"));
         for (String div : divisions) {
             String display = plugin.getDivisionManager().getDivisionDisplayName(div);
             int count = plugin.getDivisionManager().getDivisionMembers(div).size();
-            sender.sendMessage(display + " §7(" + count + "人)");
+            sender.sendMessage(plugin.getConfigManager().getMessage("division_list_entry",
+                "%division%", display,
+                "%count%", String.valueOf(count)));
         }
     }
 
@@ -105,28 +110,30 @@ public class DivisionCommand implements CommandExecutor, TabCompleter {
         if (args.length > 1) {
             target = Bukkit.getPlayer(args[1]);
             if (target == null) {
-                sender.sendMessage("§cプレイヤーが見つかりません");
+                sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found_simple"));
                 return;
             }
         } else if (sender instanceof Player) {
             target = (Player) sender;
         } else {
-            sender.sendMessage("§cプレイヤーを指定してください");
+            sender.sendMessage(plugin.getConfigManager().getMessage("error_specify_player"));
             return;
         }
 
         String division = plugin.getDivisionManager().getDivision(target.getUniqueId());
         if (division == null) {
-            sender.sendMessage("§7" + target.getName() + " は部隊に所属していません");
+            sender.sendMessage(plugin.getConfigManager().getMessage("division_info_none", "%player%", target.getName()));
         } else {
             String display = plugin.getDivisionManager().getDivisionDisplayName(division);
-            sender.sendMessage("§f" + target.getName() + " の所属: " + display);
+            sender.sendMessage(plugin.getConfigManager().getMessage("division_info_display",
+                "%player%", target.getName(),
+                "%division%", display));
         }
     }
 
     private void handleMembers(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("§c使用法: /division members <部隊>");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_division_members_usage"));
             return;
         }
 
@@ -134,10 +141,10 @@ public class DivisionCommand implements CommandExecutor, TabCompleter {
         Set<UUID> members = plugin.getDivisionManager().getDivisionMembers(division);
         
         String display = plugin.getDivisionManager().getDivisionDisplayName(division);
-        sender.sendMessage("§6=== " + display + " §6のメンバー ===");
+        sender.sendMessage(plugin.getConfigManager().getMessage("division_members_header", "%division%", display));
         
         if (members.isEmpty()) {
-            sender.sendMessage("§7メンバーなし");
+            sender.sendMessage(plugin.getConfigManager().getMessage("division_members_empty"));
             return;
         }
 
@@ -150,12 +157,12 @@ public class DivisionCommand implements CommandExecutor, TabCompleter {
     }
 
     private void sendUsage(CommandSender sender) {
-        sender.sendMessage("§6=== 部隊コマンド ===");
-        sender.sendMessage("§e/division set <プレイヤー> <部隊> §7- 配属");
-        sender.sendMessage("§e/division remove <プレイヤー> §7- 解除");
-        sender.sendMessage("§e/division list §7- 部隊一覧");
-        sender.sendMessage("§e/division info [プレイヤー] §7- 所属確認");
-        sender.sendMessage("§e/division members <部隊> §7- メンバー一覧");
+        sender.sendMessage(plugin.getConfigManager().getMessage("division_help_header"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("division_help_set"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("division_help_remove"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("division_help_list"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("division_help_info"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("division_help_members"));
     }
 
     @Override

@@ -136,7 +136,7 @@ public class PTSManager {
 
         // アクションバーで要請中表示
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                TextComponent.fromLegacyText(ChatColor.YELLOW + "✋ PTS要請中..."));
+                TextComponent.fromLegacyText(plugin.getConfigManager().getRawMessage("pts_actionbar_requesting")));
 
         // 30秒後に自動キャンセル
         final UUID playerId = player.getUniqueId();
@@ -146,7 +146,7 @@ public class PTSManager {
                 if (p != null && p.isOnline()) {
                     p.sendMessage(plugin.getConfigManager().getMessage("pts_request_timeout"));
                     p.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                            TextComponent.fromLegacyText(ChatColor.RED + "⏱ PTS要請がタイムアウトしました"));
+                            TextComponent.fromLegacyText(plugin.getConfigManager().getRawMessage("pts_actionbar_timeout")));
                 }
             }
         }, 20L * 30); // 30秒 = 600 tick
@@ -234,7 +234,7 @@ public class PTSManager {
             int remaining = getRemainingSeconds(playerId);
             if (remaining <= 0) {
                 p.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                        TextComponent.fromLegacyText(ChatColor.RED + "⏱ 発言許可失効"));
+                        TextComponent.fromLegacyText(plugin.getConfigManager().getRawMessage("pts_actionbar_expired")));
                 task.cancel();
                 return;
             }
@@ -249,8 +249,12 @@ public class PTSManager {
                 color = ChatColor.RED;
             }
 
+            String msg = plugin.getConfigManager().getRawMessage("pts_actionbar_remaining")
+                .replace("%color%", color.toString())
+                .replace("%seconds%", String.valueOf(remaining));
+
             p.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                    TextComponent.fromLegacyText(color + "🎤 発言許可: " + remaining + "秒"));
+                    TextComponent.fromLegacyText(msg));
 
         }, 0L, 20L); // 毎秒更新
     }

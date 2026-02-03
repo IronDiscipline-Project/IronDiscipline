@@ -26,7 +26,7 @@ public class RadioCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("§cこのコマンドはプレイヤーのみ使用可能。");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_player_only"));
             return true;
         }
 

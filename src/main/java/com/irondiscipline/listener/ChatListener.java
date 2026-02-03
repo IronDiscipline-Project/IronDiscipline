@@ -39,7 +39,7 @@ public class ChatListener implements Listener {
         // ===== 2. 試験中チェック（完全ブロック）=====
         if (plugin.getExamManager() != null && plugin.getExamManager().isInExam(player.getUniqueId())) {
             event.setCancelled(true);
-            player.sendMessage("§c§l【試験中】§r§7 試験中はチャットが禁止されています");
+            player.sendMessage(plugin.getConfigManager().getMessage("chat_exam_blocked"));
             return;
         }
 

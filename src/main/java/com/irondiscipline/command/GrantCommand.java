@@ -32,7 +32,7 @@ public class GrantCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length < 1) {
-            sender.sendMessage("§c使用法: /grant <プレイヤー名> [秒数]");
+            sender.sendMessage(plugin.getConfigManager().getMessage("command_grant_usage"));
             return true;
         }
 
@@ -51,11 +51,11 @@ public class GrantCommand implements CommandExecutor, TabCompleter {
             try {
                 seconds = Integer.parseInt(args[1]);
                 if (seconds <= 0) {
-                    sender.sendMessage("§c秒数は正の整数で指定せよ。");
+                    sender.sendMessage(plugin.getConfigManager().getMessage("grant_invalid_seconds"));
                     return true;
                 }
             } catch (NumberFormatException e) {
-                sender.sendMessage("§c無効な秒数: " + args[1]);
+                sender.sendMessage(plugin.getConfigManager().getMessage("grant_invalid_number", "%input%", args[1]));
                 return true;
             }
         }
