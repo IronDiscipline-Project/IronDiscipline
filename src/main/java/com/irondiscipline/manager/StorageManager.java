@@ -549,6 +549,30 @@ public class StorageManager {
         }, dbExecutor);
     }
 
+    /**
+     * 全隔離プレイヤーのUUIDを取得 (非同期)
+     */
+    public CompletableFuture<List<UUID>> getJailedPlayerIdsAsync() {
+        return CompletableFuture.supplyAsync(() -> {
+            List<UUID> ids = new ArrayList<>();
+            try {
+                String sql = "SELECT player_id FROM jailed_players";
+                try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                    try (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) {
+                            try {
+                                ids.add(UUID.fromString(rs.getString("player_id")));
+                            } catch (IllegalArgumentException ignored) {}
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                plugin.getLogger().log(Level.WARNING, plugin.getConfigManager().getRawMessage("log_load_failed_jail"), e);
+            }
+            return ids;
+        }, dbExecutor);
+    }
+
     // ===== Warnings Data =====
 
     public CompletableFuture<Void> addWarningAsync(UUID playerId, String playerName, String reason, String warnedBy, long timestamp) {
