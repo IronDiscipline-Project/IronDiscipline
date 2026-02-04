@@ -115,7 +115,11 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
         
         String reason = args.length > 2 ? String.join(" ", Arrays.copyOfRange(args, 2, args.length)) : "規律違反";
         
-        Bukkit.getBanList(BanList.Type.NAME).addBan(target.getName(), reason, null, sender.getName());
+        @SuppressWarnings("deprecation")
+        BanList<org.bukkit.BanEntry<String>> banList = (BanList<org.bukkit.BanEntry<String>>) Bukkit.getBanList(BanList.Type.NAME);
+        if (banList != null) {
+            banList.addBan(target.getName(), reason, null, sender.getName());
+        }
         target.kickPlayer(plugin.getConfigManager().getRawMessage("ban_reason_prefix") + reason);
         
         Bukkit.broadcastMessage(plugin.getConfigManager().getMessage("ban_broadcast", "%player%", target.getName(), "%reason%", reason));
