@@ -102,7 +102,7 @@ public class JailManager {
         }
 
         // DB保存 (インベントリバックアップはnull = ログイン時にバックアップ)
-        plugin.getStorageManager().saveJailedPlayer(targetId, targetName, reason,
+        plugin.getStorageManager().saveJailedPlayerAsync(targetId, targetName, plugin.getConfigManager().getRawMessage("jail_reason_offline"),
                 jailerId, null, null, null);
 
         // キャッシュ更新 (一応)
@@ -227,7 +227,7 @@ public class JailManager {
                             finalOriginalLoc = locString;
 
                             // DB更新
-                            plugin.getStorageManager().saveJailedPlayer(playerId, player.getName(), plugin.getConfigManager().getRawMessage("jail_reason_offline"),
+                            plugin.getStorageManager().saveJailedPlayerAsync(playerId, player.getName(), plugin.getConfigManager().getRawMessage("jail_reason_offline"),
                                     null, locString, newInvBackup, newArmorBackup);
 
                             // インベントリクリア

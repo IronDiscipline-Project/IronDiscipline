@@ -64,7 +64,7 @@ class StorageManagerTest {
     @Test
     void testGetArmorBackupBlocking() {
         UUID playerId = UUID.randomUUID();
-        String result = storageManager.getArmorBackup(playerId);
+        String result = storageManager.getArmorBackupAsync(playerId).join();
         assertNull(result, "getArmorBackup should return null for non-existent player");
     }
 
@@ -81,16 +81,16 @@ class StorageManagerTest {
         assertTrue(saved, "Save should succeed");
 
         // 2. Fetch using blocking method (should be fast/cached)
-        String cachedArmor = storageManager.getArmorBackup(playerId);
+        String cachedArmor = storageManager.getArmorBackupAsync(playerId).join();
         assertEquals(armorData, cachedArmor, "Should retrieve cached armor data");
 
-        String cachedInv = storageManager.getInventoryBackup(playerId);
+        String cachedInv = storageManager.getInventoryBackupAsync(playerId).join();
         assertEquals(invData, cachedInv, "Should retrieve cached inventory data");
 
         // 3. Remove data (should clear cache)
         storageManager.removeJailedPlayerAsync(playerId).join();
 
         // 4. Fetch again (should be null)
-        assertNull(storageManager.getArmorBackup(playerId), "Should be null after removal");
+        assertNull(storageManager.getArmorBackupAsync(playerId).join(), "Should be null after removal");
     }
 }

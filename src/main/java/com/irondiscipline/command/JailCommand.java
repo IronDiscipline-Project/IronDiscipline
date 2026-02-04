@@ -65,6 +65,7 @@ public class JailCommand implements CommandExecutor, TabCompleter {
             success = plugin.getJailManager().jail(target, jailer, reason);
         } else {
             // オフラインプレイヤー
+            @SuppressWarnings("deprecation")
             org.bukkit.OfflinePlayer offlineTarget = Bukkit.getOfflinePlayer(targetName);
             if (!offlineTarget.hasPlayedBefore() && !offlineTarget.isOnline()) {
                 sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found",

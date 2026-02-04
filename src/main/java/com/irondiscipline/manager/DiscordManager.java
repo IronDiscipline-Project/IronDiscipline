@@ -1040,10 +1040,11 @@ public class DiscordManager extends ListenerAdapter {
                 }
             } else if (type.equals("ban")) {
                 @SuppressWarnings("deprecation")
-                org.bukkit.BanList<?> banList = Bukkit.getBanList(org.bukkit.BanList.Type.NAME);
+                org.bukkit.BanList<org.bukkit.BanEntry<String>> banList = (org.bukkit.BanList<org.bukkit.BanEntry<String>>) Bukkit.getBanList(org.bukkit.BanList.Type.NAME);
                 if (banList != null) {
-                    banList.addBan(Bukkit.getOfflinePlayer(targetUUID).getName(), reason, (java.util.Date) null,
-                            "Console(Discord)");
+                    @SuppressWarnings("deprecation")
+                    String targetName = Bukkit.getOfflinePlayer(targetUUID).getName();
+                    banList.addBan(targetName, reason, null, "Console(Discord)");
                 }
 
                 Player target = Bukkit.getPlayer(targetUUID);
