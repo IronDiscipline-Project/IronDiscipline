@@ -115,8 +115,8 @@ class JailManagerTest {
         assertTrue(result, "Jail command should start");
         assertTrue(jailManager.isJailed(player), "Player should be in jailed cache immediately");
         
-        // Verify DB save called
-        verify(storageManager).saveJailedPlayerAsync(any(), any(), any(), any(), any(), any(), any());
+        // Verify DB save called (async, so wait up to 1 second)
+        verify(storageManager, timeout(1000)).saveJailedPlayerAsync(any(), any(), any(), any(), any(), any(), any());
     }
 
     @Test
