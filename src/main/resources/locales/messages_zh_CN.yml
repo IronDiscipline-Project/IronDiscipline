@@ -153,3 +153,189 @@ exam_q5_c1: "呼叫医护兵"
 exam_q5_c2: "无视并继续战斗"
 exam_q5_c3: "独自救援"
 exam_q5_c4: "撤退"
+
+# DemoteCommand
+command_usage_demote: "&c用法: /demote <玩家>"
+
+# DivisionCommand
+command_division_set_usage: "&c用法: /division set <玩家> <部门>"
+player_not_found_simple: "&c找不到玩家"
+division_set_sender: "&a已将 %player% 分配到 %division%。"
+division_set_target: "&e你已被分配到 %division%。"
+command_division_remove_usage: "&c用法: /division remove <玩家>"
+division_remove_sender: "&a已从部门中移除 %player%。"
+division_remove_target: "&e你已被移出你的部门。"
+division_list_header: "&6=== 部门 ==="
+division_list_entry: "%division% &7(%count% 成员)"
+division_info_none: "&7%player% 不在任何部门。"
+division_info_display: "&f%player% 的部门: %division%"
+command_division_members_usage: "&c用法: /division members <部门>"
+division_members_header: "&6=== %division% 的成员 ==="
+division_members_empty: "&7没有成员。"
+division_help_header: "&6=== 部门命令 ==="
+division_help_set: "&e/division set <玩家> <部门> &7- 分配"
+division_help_remove: "&e/division remove <玩家> &7- 移除"
+division_help_list: "&e/division list &7- 列出部门"
+division_help_info: "&e/division info [玩家] &7- 检查部门"
+division_help_members: "&e/division members <部门> &7- 列出成员"
+
+# ExamCommand
+command_player_only: "&c此命令仅限玩家执行。"
+exam_permission_denied: "&c权限被拒绝。需要少尉或更高军衔。"
+command_exam_start_usage: "&c用法: /exam start <玩家> <类型>"
+command_exam_pass_usage: "&c用法: /exam pass <玩家>"
+command_exam_fail_usage: "&c用法: /exam fail <玩家>"
+command_exam_quiz_usage: "&c用法: /exam quiz <玩家>"
+exam_help_header: "&6=== 考试命令帮助 ==="
+exam_help_start: "&e/exam start <玩家> <类型> &f- 开始考试会话"
+exam_help_pass: "&e/exam pass <玩家> &f- 通过考试（晋升）"
+exam_help_fail: "&e/exam fail <玩家> &f- 未通过考试"
+exam_help_quiz: "&e/exam quiz <玩家> &f- 开始笔试"
+exam_help_sts: "&e/exam sts &f- STS（并肩）指令"
+
+# GrantCommand
+command_grant_usage: "&c用法: /grant <玩家> [秒数]"
+grant_invalid_seconds: "&c秒数必须为正整数。"
+grant_invalid_number: "&c无效数字: %input%"
+
+# IronDisciplineCommand
+command_iron_version: "&6IronDiscipline v%version%"
+command_iron_cleanup_started: "&a已开始清理旧日志。"
+command_iron_tp_usage: "&c用法: /iron tp <玩家>"
+iron_tp_success: "&a已传送到 %player%。"
+command_iron_bring_usage: "&c用法: /iron bring <玩家>"
+iron_bring_success_sender: "&a已将 %player% 带到你身边。"
+iron_bring_success_target: "&e你被上级召唤。"
+command_iron_freeze_usage: "&c用法: /iron freeze <玩家>"
+iron_freeze_success_sender: "&a已冻结 %player%。"
+iron_freeze_success_target: "&c&l[已冻结]&r&c 移动已禁用。"
+command_iron_unfreeze_usage: "&c用法: /iron unfreeze <玩家>"
+iron_unfreeze_success_sender: "&a已解冻 %player%。"
+iron_unfreeze_success_target: "&a你已解冻。"
+iron_not_frozen: "&c%player% 未被冻结。"
+command_iron_announce_usage: "&c用法: /iron announce <消息>"
+iron_announce_title: "&6&l[公告]"
+iron_announce_chat: "&6&l[公告]&r &f%message%"
+iron_announce_sent: "&a公告已发送。"
+iron_help_header: "&6===== IronDiscipline 命令 ====="
+iron_help_reload: "&e/iron reload &7- 重载配置"
+iron_help_version: "&e/iron version &7- 显示版本"
+iron_help_cleanup: "&e/iron cleanup &7- 清理日志"
+iron_help_admin_header: "&6----- 管理员命令 -----"
+iron_help_kick: "&e/iron kick <玩家> [理由] &7- 踢出"
+iron_help_ban: "&e/iron ban <玩家> [理由] &7- 封禁"
+iron_help_tp: "&e/iron tp <玩家> &7- 传送"
+iron_help_bring: "&e/iron bring <玩家> &7- 召唤"
+iron_help_freeze: "&e/iron freeze <玩家> &7- 冻结"
+iron_help_unfreeze: "&e/iron unfreeze <玩家> &7- 解冻"
+iron_help_announce: "&e/iron announce <消息> &7- 广播"
+
+# JailCommand
+command_jail_usage: "&c用法: /jail <玩家> [理由]"
+jail_reason_default: "未提供理由"
+jail_failed: "&c关押失败。玩家可能已被关押或配置错误。"
+jail_reason_suggestion_1: "抗命"
+jail_reason_suggestion_2: "无视命令"
+jail_reason_suggestion_3: "不当行为"
+
+# KillLogCommand
+killlog_searching: "&e正在搜索 %player% 的战斗日志..."
+killlog_header_player: "&6===== 战斗日志 (%player%) ====="
+killlog_not_found: "&7未找到日志。"
+killlog_header_latest: "&6===== 最新战斗日志 ====="
+killlog_environment: "环境"
+killlog_entry_format: "&7[%date%]%killer_color% %killer% &7-> &c%victim% &7| &b%weapon% &7(%distance%)"
+
+# LinkCommand
+link_success_notification_title: "🔗 绑定完成"
+
+# PlaytimeCommand
+playtime_header: "&6=== 游戏时间: %player% ==="
+playtime_total: "&7总计: &f%time%"
+playtime_today: "&7今日: &f%time%"
+playtime_ranking_header: "&6=== 游戏时间排行 ==="
+playtime_rank_1: "&6&l第1名"
+playtime_rank_2: "&f&l第2名"
+playtime_rank_3: "&c&l第3名"
+playtime_rank_other: "&7第%rank%名"
+
+# PromoteCommand
+command_promote_usage: "&c用法: /promote <玩家>"
+
+# RadioBroadcastCommand
+command_rb_usage: "&c用法: /rb <消息>"
+
+# UnjailCommand
+command_unjail_usage: "&c用法: /unjail <玩家>"
+unjail_not_jailed: "&c此玩家未被关押。"
+
+# ExamManager
+exam_sts_header: "&e&l=== STS (肩并肩) ==="
+exam_sts_message: "&c%officer% 下令 STS！立即排队！"
+exam_start_broadcast: "&e[考试] &f%instructor% &e开始了 &f%target% &e的 &b%type% &e考试。"
+exam_pass_broadcast: "&a[通过] &f%target% &a通过了考试！"
+exam_promotion_congrats: "&a恭喜晋升: %rank%"
+exam_fail_broadcast: "&c[失败] &f%target% &c未通过考试。"
+exam_already_in_session: "&c该玩家已在考试中。"
+exam_quiz_start_header: "&a=== 笔试开始 ==="
+exam_quiz_instruction: "&e请在聊天中回答。"
+exam_quiz_question_format: "&6问%index%: &f%question%"
+exam_quiz_finished: "&e考试结束！"
+exam_quiz_score: "&f得分: %score% / %total%"
+exam_quiz_pass_broadcast: "&a%player% 通过了笔试！"
+exam_quiz_fail_message: "&c未通过。请稍后再试！"
+exam_quiz_cancelled: "&c考试已取消。"
+exam_quiz_correct: "&a正确！"
+exam_quiz_incorrect: "&c错误... (答案: %answer%)"
+exam_demo_q1_text: "敬礼的正确顺序是什么？"
+exam_demo_q1_correct: "绝对"
+exam_demo_q1_valid: "绝对,是"
+exam_demo_q2_text: "允许未经授权开火吗？(是/否)"
+exam_demo_q2_correct: "否"
+exam_demo_q2_valid: "否"
+exam_demo_q3_text: "谁是最高军衔？"
+exam_demo_q3_correct: "指挥官"
+exam_demo_q3_valid: "指挥官"
+
+# JailManager
+jail_reason_offline: "离线关押"
+jail_reason_reconnect: "重连"
+jail_reason_relocated: "重新定位 (已关押)"
+
+# PTSManager
+pts_actionbar_requesting: "&e✋ 请求 PTS..."
+pts_actionbar_timeout: "&c⏱ PTS 请求超时"
+pts_actionbar_expired: "&c⏱ 许可过期"
+pts_actionbar_remaining: "%color%🎤 PTS: %seconds%秒"
+
+# WarningManager
+warn_punish_kick_reason: "&c因达到 %limit% 次警告而被踢出。"
+warn_punish_jail_reason: "因 %count% 次警告自动关押"
+
+# ChatListener
+chat_exam_blocked: "&c&l[考试]&r&7 考试期间禁用聊天。"
+
+# CombatListener Weapons
+weapon_hand: "手"
+weapon_diamond_sword: "钻石剑"
+weapon_iron_sword: "铁剑"
+weapon_golden_sword: "金剑"
+weapon_stone_sword: "石剑"
+weapon_wooden_sword: "木剑"
+weapon_netherite_sword: "下界合金剑"
+weapon_bow: "弓"
+weapon_crossbow: "弩"
+weapon_trident: "三叉戟"
+weapon_diamond_axe: "钻石斧"
+weapon_iron_axe: "铁斧"
+weapon_netherite_axe: "下界合金斧"
+
+# IronDiscipline Main
+log_luckperms_not_found: "未找到 LuckPerms！禁用插件。"
+log_startup_success: "&aIronDiscipline v%version% 已启用！"
+log_shutdown_complete: "IronDiscipline 已禁用"
+log_managers_initialized: "管理器已初始化"
+log_listeners_registered: "监听器已注册"
+log_commands_registered: "命令已注册"
+log_discord_disabled: "Discord 集成已禁用 (检查 config.yml)"
+log_reload_complete: "配置已重载"

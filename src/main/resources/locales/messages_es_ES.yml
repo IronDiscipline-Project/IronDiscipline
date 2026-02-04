@@ -153,3 +153,189 @@ exam_q5_c1: "Llamar a un médico"
 exam_q5_c2: "Ignorar y seguir luchando"
 exam_q5_c3: "Rescatarlo solo"
 exam_q5_c4: "Retirarse"
+
+# DemoteCommand
+command_usage_demote: "&cUso: /demote <jugador>"
+
+# DivisionCommand
+command_division_set_usage: "&cUso: /division set <jugador> <división>"
+player_not_found_simple: "&cJugador no encontrado"
+division_set_sender: "&aAsignado %player% a %division%."
+division_set_target: "&eHas sido asignado a %division%."
+command_division_remove_usage: "&cUso: /division remove <jugador>"
+division_remove_sender: "&aSe eliminó a %player% de su división."
+division_remove_target: "&eHas sido eliminado de tu división."
+division_list_header: "&6=== Divisiones ==="
+division_list_entry: "%division% &7(%count% miembros)"
+division_info_none: "&7%player% no está en una división."
+division_info_display: "&fDivisión de %player%: %division%"
+command_division_members_usage: "&cUso: /division members <división>"
+division_members_header: "&6=== Miembros de %division% ==="
+division_members_empty: "&7Sin miembros."
+division_help_header: "&6=== Comandos de División ==="
+division_help_set: "&e/division set <jugador> <división> &7- Asignar"
+division_help_remove: "&e/division remove <jugador> &7- Eliminar"
+division_help_list: "&e/division list &7- Listar divisiones"
+division_help_info: "&e/division info [jugador] &7- Verificar división"
+division_help_members: "&e/division members <división> &7- Listar miembros"
+
+# ExamCommand
+command_player_only: "&cEste comando solo puede ser ejecutado por un jugador."
+exam_permission_denied: "&cPermiso denegado. Se requiere rango de Segundo Teniente o superior."
+command_exam_start_usage: "&cUso: /exam start <jugador> <tipo>"
+command_exam_pass_usage: "&cUso: /exam pass <jugador>"
+command_exam_fail_usage: "&cUso: /exam fail <jugador>"
+command_exam_quiz_usage: "&cUso: /exam quiz <jugador>"
+exam_help_header: "&6=== Ayuda de Comandos de Examen ==="
+exam_help_start: "&e/exam start <jugador> <tipo> &f- Iniciar sesión de examen"
+exam_help_pass: "&e/exam pass <jugador> &f- Aprobar examen (Ascender)"
+exam_help_fail: "&e/exam fail <jugador> &f- Reprobar examen"
+exam_help_quiz: "&e/exam quiz <jugador> &f- Iniciar examen escrito"
+exam_help_sts: "&e/exam sts &f- Orden STS (Hombro con Hombro)"
+
+# GrantCommand
+command_grant_usage: "&cUso: /grant <jugador> [segundos]"
+grant_invalid_seconds: "&cLos segundos deben ser un entero positivo."
+grant_invalid_number: "&cNúmero inválido: %input%"
+
+# IronDisciplineCommand
+command_iron_version: "&6IronDiscipline v%version%"
+command_iron_cleanup_started: "&aSe inició la limpieza de registros antiguos."
+command_iron_tp_usage: "&cUso: /iron tp <jugador>"
+iron_tp_success: "&aTeletransportado a %player%."
+command_iron_bring_usage: "&cUso: /iron bring <jugador>"
+iron_bring_success_sender: "&aTraído %player% hacia ti."
+iron_bring_success_target: "&eFuiste convocado por un superior."
+command_iron_freeze_usage: "&cUso: /iron freeze <jugador>"
+iron_freeze_success_sender: "&aCongelado %player%."
+iron_freeze_success_target: "&c&l[CONGELADO]&r&c El movimiento está desactivado."
+command_iron_unfreeze_usage: "&cUso: /iron unfreeze <jugador>"
+iron_unfreeze_success_sender: "&aDescongelado %player%."
+iron_unfreeze_success_target: "&aHas sido descongelado."
+iron_not_frozen: "&c%player% no está congelado."
+command_iron_announce_usage: "&cUso: /iron announce <mensaje>"
+iron_announce_title: "&6&l[ANUNCIO]"
+iron_announce_chat: "&6&l[ANUNCIO]&r &f%message%"
+iron_announce_sent: "&aAnuncio enviado."
+iron_help_header: "&6===== Comandos IronDiscipline ====="
+iron_help_reload: "&e/iron reload &7- Recargar config"
+iron_help_version: "&e/iron version &7- Mostrar versión"
+iron_help_cleanup: "&e/iron cleanup &7- Limpiar registros"
+iron_help_admin_header: "&6----- Comandos de Admin -----"
+iron_help_kick: "&e/iron kick <jugador> [razón] &7- Expulsar"
+iron_help_ban: "&e/iron ban <jugador> [razón] &7- Banear"
+iron_help_tp: "&e/iron tp <jugador> &7- Teletransportar"
+iron_help_bring: "&e/iron bring <jugador> &7- Traer"
+iron_help_freeze: "&e/iron freeze <jugador> &7- Congelar"
+iron_help_unfreeze: "&e/iron unfreeze <jugador> &7- Descongelar"
+iron_help_announce: "&e/iron announce <msj> &7- Anunciar"
+
+# JailCommand
+command_jail_usage: "&cUso: /jail <jugador> [razón]"
+jail_reason_default: "Sin razón proporcionada"
+jail_failed: "&cError al encarcelar. El jugador podría ya estar encarcelado o error de config."
+jail_reason_suggestion_1: "Insubordinación"
+jail_reason_suggestion_2: "Ignorar Órdenes"
+jail_reason_suggestion_3: "Mala Conducta"
+
+# KillLogCommand
+killlog_searching: "&eBuscando registros de combate para %player%..."
+killlog_header_player: "&6===== Registro de Combate (%player%) ====="
+killlog_not_found: "&7No se encontraron registros."
+killlog_header_latest: "&6===== Último Registro de Combate ====="
+killlog_environment: "Entorno"
+killlog_entry_format: "&7[%date%]%killer_color% %killer% &7-> &c%victim% &7| &b%weapon% &7(%distance%)"
+
+# LinkCommand
+link_success_notification_title: "🔗 Enlace Completo"
+
+# PlaytimeCommand
+playtime_header: "&6=== Tiempo de Juego: %player% ==="
+playtime_total: "&7Total: &f%time%"
+playtime_today: "&7Hoy: &f%time%"
+playtime_ranking_header: "&6=== Ranking de Tiempo de Juego ==="
+playtime_rank_1: "&6&l1º"
+playtime_rank_2: "&f&l2º"
+playtime_rank_3: "&c&l3º"
+playtime_rank_other: "&7%rank%º"
+
+# PromoteCommand
+command_promote_usage: "&cUso: /promote <jugador>"
+
+# RadioBroadcastCommand
+command_rb_usage: "&cUso: /rb <mensaje>"
+
+# UnjailCommand
+command_unjail_usage: "&cUso: /unjail <jugador>"
+unjail_not_jailed: "&cEste jugador no está encarcelado."
+
+# ExamManager
+exam_sts_header: "&e&l=== STS (HOMBRO CON HOMBRO) ==="
+exam_sts_message: "&c¡%officer% ordenó STS! ¡Fórmense inmediatamente!"
+exam_start_broadcast: "&e[Examen] &f%instructor% &einició examen de &b%type% &epara &f%target%&e."
+exam_pass_broadcast: "&a[APROBADO] &f%target% &a¡aprobó el examen!"
+exam_promotion_congrats: "&aFelicidades por tu ascenso: %rank%"
+exam_fail_broadcast: "&c[REPROBADO] &f%target% &creprobó el examen."
+exam_already_in_session: "&cEse jugador ya está en un examen."
+exam_quiz_start_header: "&a=== Inicio de Examen Escrito ==="
+exam_quiz_instruction: "&ePor favor responde en el chat."
+exam_quiz_question_format: "&6P%index%: &f%question%"
+exam_quiz_finished: "&e¡Examen Finalizado!"
+exam_quiz_score: "&fPuntaje: %score% / %total%"
+exam_quiz_pass_broadcast: "&a¡%player% aprobó el examen escrito!"
+exam_quiz_fail_message: "&cReprobado. ¡Inténtalo más tarde!"
+exam_quiz_cancelled: "&cExamen cancelado."
+exam_quiz_correct: "&a¡Correcto!"
+exam_quiz_incorrect: "&cIncorrecto... (Respuesta: %answer%)"
+exam_demo_q1_text: "¿Cuál es el orden correcto de un saludo?"
+exam_demo_q1_correct: "Absoluto"
+exam_demo_q1_valid: "Absoluto,Sí"
+exam_demo_q2_text: "¿Está permitido disparar sin autorización? (sí/no)"
+exam_demo_q2_correct: "No"
+exam_demo_q2_valid: "No"
+exam_demo_q3_text: "¿Quién tiene el rango más alto?"
+exam_demo_q3_correct: "Comandante"
+exam_demo_q3_valid: "Comandante"
+
+# JailManager
+jail_reason_offline: "Cárcel Offline"
+jail_reason_reconnect: "Reconexión"
+jail_reason_relocated: "Reubicado (Encarcelado)"
+
+# PTSManager
+pts_actionbar_requesting: "&e✋ Solicitando PTS..."
+pts_actionbar_timeout: "&c⏱ Solicitud PTS Expiró"
+pts_actionbar_expired: "&c⏱ Permiso Expirado"
+pts_actionbar_remaining: "%color%🎤 PTS: %seconds%s"
+
+# WarningManager
+warn_punish_kick_reason: "&cExpulsado por alcanzar %limit% advertencias."
+warn_punish_jail_reason: "Auto-cárcel debido a %count% advertencias"
+
+# ChatListener
+chat_exam_blocked: "&c&l[EXAMEN]&r&7 El chat está desactivado durante el examen."
+
+# CombatListener Weapons
+weapon_hand: "Mano"
+weapon_diamond_sword: "Espada de Diamante"
+weapon_iron_sword: "Espada de Hierro"
+weapon_golden_sword: "Espada de Oro"
+weapon_stone_sword: "Espada de Piedra"
+weapon_wooden_sword: "Espada de Madera"
+weapon_netherite_sword: "Espada de Netherita"
+weapon_bow: "Arco"
+weapon_crossbow: "Ballesta"
+weapon_trident: "Tridente"
+weapon_diamond_axe: "Hacha de Diamante"
+weapon_iron_axe: "Hacha de Hierro"
+weapon_netherite_axe: "Hacha de Netherita"
+
+# IronDiscipline Main
+log_luckperms_not_found: "¡LuckPerms no encontrado! Desactivando plugin."
+log_startup_success: "&a¡IronDiscipline v%version% Activado!"
+log_shutdown_complete: "IronDiscipline Desactivado"
+log_managers_initialized: "Gerentes Inicializados"
+log_listeners_registered: "Oyentes Registrados"
+log_commands_registered: "Comandos Registrados"
+log_discord_disabled: "Integración de Discord desactivada (ver config.yml)"
+log_reload_complete: "Configuración Recargada"
