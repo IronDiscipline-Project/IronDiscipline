@@ -23,8 +23,17 @@ cd /opt/minecraft
 # Paper MCダウンロード
 VERSION="1.21.1"
 echo "Paper MC $VERSION をダウンロード中..."
-BUILD=$(curl -s "https://api.papermc.io/v2/projects/paper/versions/$VERSION/builds" | jq -r '.builds[-1].build')
+RESPONSE=$(curl -s "https://api.papermc.io/v2/projects/paper/versions/$VERSION/builds")
+BUILD=$(echo "$RESPONSE" | jq -r '.builds[-1].build')
+HASH=$(echo "$RESPONSE" | jq -r '.builds[-1].downloads.application.sha256')
+
+if [ "$BUILD" == "null" ] || [ -z "$BUILD" ]; then
+    echo "Error: Paper MC build info fetch failed."
+    exit 1
+fi
+
 curl -o paper.jar -L "https://api.papermc.io/v2/projects/paper/versions/$VERSION/builds/$BUILD/downloads/paper-$VERSION-$BUILD.jar"
+echo "$HASH paper.jar" | sha256sum -c -
 
 # EULA同意
 echo "eula=true" > eula.txt
@@ -45,7 +54,9 @@ EOF
 # LuckPermsダウンロード
 echo "LuckPerms をダウンロード中..."
 LUCKPERMS_URL="https://download.luckperms.net/1552/bukkit/loader/LuckPerms-Bukkit-5.4.145.jar"
+LUCKPERMS_HASH="4f0d42a3f78a1984a02523555fc9a78583ff2c2dee4cc9a218bd2e8323f47aca"
 curl -o plugins/LuckPerms.jar -L "$LUCKPERMS_URL"
+echo "$LUCKPERMS_HASH plugins/LuckPerms.jar" | sha256sum -c -
 
 # IronDiscipline.jar をGCSからダウンロード (See docs/GCP_DEPLOY.md)
 echo "IronDiscipline をダウンロード中..."

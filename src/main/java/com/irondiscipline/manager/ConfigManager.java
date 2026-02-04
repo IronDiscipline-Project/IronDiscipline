@@ -293,6 +293,10 @@ public class ConfigManager {
         return config.getString("discord.notification_role_id", "");
     }
 
+    public String getDiscordAdminRoleId() {
+        return config.getString("discord.admin_role_id", "");
+    }
+
     public String getDiscordConsoleRoleId() {
         return config.getString("discord.console_role_id", "");
     }

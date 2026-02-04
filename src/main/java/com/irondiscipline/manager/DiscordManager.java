@@ -42,6 +42,7 @@ public class DiscordManager extends ListenerAdapter {
     private String guildId;
     private String unverifiedRoleId;
     private String verifiedRoleId;
+    private String adminRoleId;
     private boolean enabled = false;
 
     // 寄付システム
@@ -56,7 +57,7 @@ public class DiscordManager extends ListenerAdapter {
      * Botを起動
      */
     public boolean start(String botToken, String channelId, String guildId, String unverifiedRoleId,
-            String verifiedRoleId) {
+            String verifiedRoleId, String adminRoleId) {
         if (botToken == null || botToken.isEmpty()) {
             plugin.getLogger().warning("Discord Bot Token が設定されていません");
             return false;
@@ -66,6 +67,7 @@ public class DiscordManager extends ListenerAdapter {
         this.guildId = guildId;
         this.unverifiedRoleId = unverifiedRoleId;
         this.verifiedRoleId = verifiedRoleId;
+        this.adminRoleId = adminRoleId;
 
         try {
             jda = JDABuilder.createDefault(botToken)
@@ -83,6 +85,16 @@ public class DiscordManager extends ListenerAdapter {
             plugin.getLogger().severe("Discord Bot 起動失敗: " + e.getMessage());
             return false;
         }
+    }
+
+    private boolean isAdmin(Member member) {
+        if (member == null) return false;
+        if (member.hasPermission(Permission.ADMINISTRATOR)) return true;
+        if (adminRoleId != null && !adminRoleId.isEmpty()) {
+            Role adminRole = member.getGuild().getRoleById(adminRoleId);
+            return adminRole != null && member.getRoles().contains(adminRole);
+        }
+        return false;
     }
 
     @Override
@@ -399,8 +411,7 @@ public class DiscordManager extends ListenerAdapter {
 
     private void handleSetGoal(SlashCommandInteractionEvent event) {
         // 管理者権限チェック
-        if (event.getMember() == null
-                || !event.getMember().hasPermission(net.dv8tion.jda.api.Permission.ADMINISTRATOR)) {
+        if (!isAdmin(event.getMember())) {
             event.reply("❌ このコマンドは管理者のみ使用可能です。").setEphemeral(true).queue();
             return;
         }
@@ -560,7 +571,7 @@ public class DiscordManager extends ListenerAdapter {
      */
     private void handleSettings(SlashCommandInteractionEvent event) {
         // 管理者権限チェック
-        if (event.getMember() == null || !event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
+        if (!isAdmin(event.getMember())) {
             event.reply("❌ このコマンドは管理者のみ使用可能です。").setEphemeral(true).queue();
             return;
         }
@@ -633,7 +644,7 @@ public class DiscordManager extends ListenerAdapter {
     }
 
     private void handlePanel(SlashCommandInteractionEvent event) {
-        if (event.getMember() == null || !event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
+        if (!isAdmin(event.getMember())) {
             event.reply("❌ このコマンドは管理者のみ使用可能です。").setEphemeral(true).queue();
             return;
         }
@@ -874,7 +885,7 @@ public class DiscordManager extends ListenerAdapter {
     }
 
     private void handleDivision(SlashCommandInteractionEvent event) {
-        if (event.getMember() == null || !event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
+        if (!isAdmin(event.getMember())) {
             event.reply("❌ このコマンドは管理者のみ使用可能です。").setEphemeral(true).queue();
             return;
         }
@@ -948,7 +959,7 @@ public class DiscordManager extends ListenerAdapter {
     }
 
     private void handleAdminRank(SlashCommandInteractionEvent event, boolean promote) {
-        if (event.getMember() == null || !event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
+        if (!isAdmin(event.getMember())) {
             event.reply("❌ このコマンドは管理者のみ使用可能です。").setEphemeral(true).queue();
             return;
         }
@@ -987,7 +998,7 @@ public class DiscordManager extends ListenerAdapter {
     }
 
     private void handleSetRank(SlashCommandInteractionEvent event) {
-        if (event.getMember() == null || !event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
+        if (!isAdmin(event.getMember())) {
             event.reply("❌ このコマンドは管理者のみ使用可能です。").setEphemeral(true).queue();
             return;
         }
@@ -1018,7 +1029,7 @@ public class DiscordManager extends ListenerAdapter {
     }
 
     private void handlePunish(SlashCommandInteractionEvent event, String type) {
-        if (event.getMember() == null || !event.getMember().hasPermission(Permission.KICK_MEMBERS)) {
+        if (!isAdmin(event.getMember()) && (event.getMember() == null || !event.getMember().hasPermission(Permission.KICK_MEMBERS))) {
             event.reply("❌ 権限がありません。").setEphemeral(true).queue();
             return;
         }

@@ -202,9 +202,10 @@ public class IronDiscipline extends JavaPlugin {
         String guildId = configManager.getDiscordGuildId();
         String unverifiedRoleId = configManager.getDiscordUnverifiedRoleId();
         String verifiedRoleId = configManager.getDiscordVerifiedRoleId();
+        String adminRoleId = configManager.getDiscordAdminRoleId();
 
         if (botToken != null && !botToken.isEmpty() && configManager.isDiscordEnabled()) {
-            discordManager.start(botToken, channelId, guildId, unverifiedRoleId, verifiedRoleId);
+            discordManager.start(botToken, channelId, guildId, unverifiedRoleId, verifiedRoleId, adminRoleId);
         } else {
             getLogger().info(configManager.getRawMessage("log_discord_disabled"));
         }
