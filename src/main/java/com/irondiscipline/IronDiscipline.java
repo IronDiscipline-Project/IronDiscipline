@@ -123,6 +123,9 @@ public class IronDiscipline extends JavaPlugin {
     }
 
     private void initializeManagers() {
+        this.taskScheduler = new com.irondiscipline.util.TaskScheduler(this);
+        this.rankUtil = new RankUtil(this);
+        
         this.storageManager = new StorageManager(this);
         this.rankManager = new RankManager(this, luckPerms);
         this.ptsManager = new PTSManager(this);
@@ -136,8 +139,6 @@ public class IronDiscipline extends JavaPlugin {
         this.linkManager = new LinkManager(this);
         this.discordManager = new DiscordManager(this);
         this.autoPromotionManager = new AutoPromotionManager(this, rankManager);
-        this.rankUtil = new RankUtil(this);
-        this.taskScheduler = new com.irondiscipline.util.TaskScheduler(this);
 
         // Start auto-promotion task
         this.autoPromotionManager.startTask();
