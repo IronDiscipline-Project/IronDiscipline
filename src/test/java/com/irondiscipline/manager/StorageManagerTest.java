@@ -36,6 +36,7 @@ class StorageManagerTest {
 
         when(plugin.getConfigManager()).thenReturn(configManager);
         when(configManager.getDatabaseType()).thenReturn("h2");
+        when(configManager.getRawMessage(anyString())).thenReturn("Test Message");
         when(plugin.getDataFolder()).thenReturn(tempDir.toFile());
         when(plugin.getLogger()).thenReturn(Logger.getLogger("TestLogger"));
 
