@@ -1,33 +1,33 @@
 [🇺🇸 English](GCP_DEPLOY_en_US.md) | [🇩🇪 Deutsch](GCP_DEPLOY_de_DE.md) | [🇪🇸 Español](GCP_DEPLOY_es_ES.md) | [🇨🇳 中文](GCP_DEPLOY_zh_CN.md) | [🇯🇵 日本語](GCP_DEPLOY_ja_JP.md)
 
-# IronDiscipline GCP デプロイガイド
+# IronDiscipline GCP Bereitstellungsleitfaden
 
-## 前提条件
+## Voraussetzungen
 
-1. [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) インストール済み
-2. GCPプロジェクト作成済み
-3. 課金有効化済み
+1. [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) installiert
+2. GCP-Projekt erstellt
+3. Abrechnung aktiviert
 
-## 方法1: 簡単デプロイ（推奨）
+## Methode 1: Einfache Bereitstellung (Empfohlen)
 
-### 1. プラグインをビルド
+### 1. Plugin bauen
 
 ```powershell
 mvn clean package
 ```
 
-### 2. GCSバケットにアップロード
+### 2. In GCS-Bucket hochladen
 
 ```bash
-# バケット作成
+# Bucket erstellen
 gsutil mb gs://irondiscipline-server
 
-# JARアップロード
+# JAR hochladen
 gsutil cp target/IronDiscipline-latest.jar gs://irondiscipline-server/
 gsutil cp plugins/LuckPerms*.jar gs://irondiscipline-server/
 ```
 
-### 3. GCEインスタンス作成
+### 3. GCE-Instanz erstellen
 
 ```bash
 gcloud compute instances create irondiscipline-mc \
@@ -40,7 +40,7 @@ gcloud compute instances create irondiscipline-mc \
     --metadata-from-file startup-script=scripts/gcp-startup.sh
 ```
 
-### 4. ファイアウォール設定
+### 4. Firewall-Einstellungen
 
 ```bash
 gcloud compute firewall-rules create minecraft-port \
@@ -48,63 +48,63 @@ gcloud compute firewall-rules create minecraft-port \
     --target-tags=minecraft-server
 ```
 
-### 5. 接続
+### 5. Verbindung
 
 ```bash
-# IP確認
+# IP überprüfen
 gcloud compute instances describe irondiscipline-mc --zone=asia-northeast1-b \
     --format='get(networkInterfaces[0].accessConfigs[0].natIP)'
 ```
 
-Minecraftで `<IP>:25565` に接続！
+Verbinden Sie sich in Minecraft mit `<IP>:25565`!
 
 ---
 
-## 方法2: Docker（上級者向け）
+## Methode 2: Docker (Fortgeschritten)
 
 ```bash
-# SSH接続
+# SSH-Verbindung
 gcloud compute ssh irondiscipline-mc --zone=asia-northeast1-b
 
-# Docker インストール
+# Docker installieren
 sudo apt-get update && sudo apt-get install -y docker.io docker-compose
 
-# コンテナ起動
+# Container starten
 docker-compose up -d
 ```
 
 ---
 
-## 料金目安（東京リージョン）
+## Geschätzte Kosten (Region Tokio)
 
-| マシンタイプ | RAM | 月額（概算） |
+| Maschinentyp | RAM | Monatlich (Ca.) |
 |-------------|-----|-------------|
-| e2-micro | 1GB | 無料枠内 |
+| e2-micro | 1GB | Kostenloses Kontingent |
 | e2-small | 2GB | ~$15 |
 | e2-medium | 4GB | ~$30 |
 
 ---
 
-## Discord Bot設定
+## Discord Bot Einrichtung
 
-1. サーバー起動後、config.ymlを編集：
+1. Nach dem Serverstart config.yml bearbeiten:
 
 ```bash
 gcloud compute ssh irondiscipline-mc --zone=asia-northeast1-b
 sudo nano /opt/minecraft/plugins/IronDiscipline/config.yml
 ```
 
-2. Discord設定を入力：
+2. Discord-Einstellungen eingeben:
 
 ```yaml
 discord:
   enabled: true
-  bot_token: "YOUR_BOT_TOKEN"
+  bot_token: "IHR_BOT_TOKEN"
   notification_channel_id: "CHANNEL_ID"
   guild_id: "SERVER_ID"
 ```
 
-3. サーバー再起動：
+3. Server neu starten:
 
 ```bash
 sudo systemctl restart minecraft
@@ -112,18 +112,18 @@ sudo systemctl restart minecraft
 
 ---
 
-## 便利コマンド
+## Nützliche Befehle
 
 ```bash
-# ログ確認
+# Logs überprüfen
 sudo journalctl -u minecraft -f
 
-# サーバー停止
+# Server stoppen
 sudo systemctl stop minecraft
 
-# サーバー起動
+# Server starten
 sudo systemctl start minecraft
 
-# コンソール接続
+# Mit Konsole verbinden
 screen -r minecraft
 ```

@@ -54,7 +54,7 @@ ssh root@<サーバーIP> "systemctl restart minecraft"
 **開放が必要なポート:**
 - TCP: `25565` (Java版)
 - UDP: `19132` (統合版/スマホ - Geyser使用時)
-        
+
 ## 5. Discord連携設定
 
 1. コンフィグを開く
