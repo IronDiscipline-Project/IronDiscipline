@@ -114,13 +114,13 @@ mvn clean package
 このプロジェクトは、**Google Cloud Platform (GCP)** や **Xserver VPS** などの一般的なVPSで動作するように設計されています。
 
 ### 1. GCP (Google Cloud Platform)
-[GCPデプロイガイド (Docs)](docs/GCP_DEPLOY.md) を参照してください。専用スクリプトで数分で構築できます。
+[GCPデプロイガイド (Docs)](docs/GCP_DEPLOY_ja_JP.md) を参照してください。専用スクリプトで数分で構築できます。
 
 ### 2. 一般的なVPS (Xserver, ConoHaなど)
-[汎用VPSデプロイガイド (Docs)](docs/VPS_DEPLOY.md) を参照してください。Ubuntu環境であれば、汎用スクリプトで一発セットアップ可能です。
+[汎用VPSデプロイガイド (Docs)](docs/VPS_DEPLOY_ja_JP.md) を参照してください。Ubuntu環境であれば、汎用スクリプトで一発セットアップ可能です。
 
 ### 3. 統合版 (スマホ/Switch) 対応
-[統合版対応ガイド (Docs)](docs/CROSS_PLAY.md) を参照してください。Geyserを使用してクロスプラットフォームプレイを実現します。
+[統合版対応ガイド (Docs)](docs/CROSS_PLAY_ja_JP.md) を参照してください。Geyserを使用してクロスプラットフォームプレイを実現します。
 
 ## 🔄 自動アップデート
 
