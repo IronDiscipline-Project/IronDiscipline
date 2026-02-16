@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>IronDiscipline</name>
-    <description>鉄の規律 - 軍事RP向け規律システムプラグイン</description>
+    <description>鉄の規律 - 軍事RP向け規律システムプラグイン（PaperSpigot + LuckPerms版）</description>
 
     <properties>
         <java.version>17</java.version>
@@ -29,10 +29,6 @@
         <repository>
             <id>jda</id>
             <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-        <repository>
-            <id>arim-repo</id>
-            <url>https://mvn-repo.arim.space/lesser-gpl3/</url>
         </repository>
     </repositories>
 
@@ -91,12 +87,6 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>5.10.0</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>space.arim.morepaperlib</groupId>
-            <artifactId>morepaperlib</artifactId>
-            <version>0.4.4</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

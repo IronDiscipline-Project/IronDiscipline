@@ -5,6 +5,9 @@
 Comprehensive management and discipline maintenance plugin for Minecraft servers.
 Designed for Military/Prison RP servers.
 
+> ⚠️ **This version is for PaperSpigot + LuckPerms only.** Folia is not supported.
+> For Folia, please use [IronDiscipline-dev](https://github.com/kaji11-jp/IronDiscipline-dev).
+
 ## Features
 
 - **Rank System**: Permission management by rank, fully customizable via config.yml.
@@ -25,7 +28,7 @@ Designed for Military/Prison RP servers.
 ## Requirements
 
 - Java 17+
-- Paper / Spigot 1.18+
+- Paper / Spigot 1.18+ (**Folia not supported**)
 - LuckPerms (Required)
 - MySQL, SQLite, or H2 Database (Default)
 

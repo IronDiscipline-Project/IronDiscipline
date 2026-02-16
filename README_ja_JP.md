@@ -5,6 +5,9 @@
 Minecraftサーバー用 総合管理・規律維持プラグイン。
 軍隊・刑務所RPサーバー向けに設計されています。
 
+> ⚠️ **このバージョンは PaperSpigot + LuckPerms 専用です。** Foliaはサポートされていません。
+> Foliaを使用する場合は [IronDiscipline-dev](https://github.com/kaji11-jp/IronDiscipline-dev) をご利用ください。
+
 ## 機能
 
 - **階級システム**: 階級による権限管理、config.ymlでの完全なカスタマイズが可能
@@ -25,7 +28,7 @@ Minecraftサーバー用 総合管理・規律維持プラグイン。
 ## 必要要件
 
 - Java 17+
-- Paper / Spigot 1.18+
+- Paper / Spigot 1.18+（**Folia非対応**）
 - LuckPerms (必須)
 - MySQL, SQLite または H2 Database (デフォルト)
 

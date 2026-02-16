@@ -15,7 +15,7 @@ public class AutoPromotionManager {
 
     private final IronDiscipline plugin;
     private final RankManager rankManager;
-    private space.arim.morepaperlib.scheduling.ScheduledTask task;
+    private BukkitTask task;
 
     public AutoPromotionManager(IronDiscipline plugin, RankManager rankManager) {
         this.plugin = plugin;

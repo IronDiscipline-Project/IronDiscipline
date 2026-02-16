@@ -5,6 +5,9 @@
 Minecraft 服务器综合管理与纪律维护插件。
 专为军队/监狱角色扮演服务器设计。
 
+> ⚠️ **此版本仅适用于 PaperSpigot + LuckPerms。** 不支持 Folia。
+> 如需使用 Folia，请使用 [IronDiscipline-dev](https://github.com/kaji11-jp/IronDiscipline-dev)。
+
 ## 功能
 
 - **军衔系统**: 基于军衔的权限管理，可通过 `config.yml` 完全自定义。
@@ -25,7 +28,7 @@ Minecraft 服务器综合管理与纪律维护插件。
 ## 需求
 
 - Java 17+
-- Paper / Spigot 1.18+
+- Paper / Spigot 1.18+（**不支持 Folia**）
 - LuckPerms (必需)
 - MySQL, SQLite 或 H2 Database (默认)
 
