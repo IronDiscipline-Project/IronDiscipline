@@ -103,6 +103,10 @@ public class ConfigManager {
 
     // ===== PTS =====
 
+    public boolean isPTSEnabled() {
+        return config.getBoolean("pts.enabled", true);
+    }
+
     public int getPTSRequireBelowWeight() {
         return config.getInt("pts.require_below_weight", 25);
     }
@@ -249,7 +253,11 @@ public class ConfigManager {
 
         for (int i = 0; i < replacements.length; i += 2) {
             if (i + 1 < replacements.length) {
-                fullMessage = fullMessage.replace(replacements[i], replacements[i + 1]);
+                String placeholder = replacements[i];
+                String replacement = replacements[i + 1];
+                if (replacement != null) {
+                    fullMessage = fullMessage.replace(placeholder, replacement);
+                }
             }
         }
         return fullMessage;

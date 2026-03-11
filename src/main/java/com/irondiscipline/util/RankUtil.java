@@ -29,8 +29,7 @@ public class RankUtil {
         }
 
         Rank rank = plugin.getRankManager().getRank(player);
-        // LIEUTENANT = 少尉 (weight 40)
-        if (rank.getWeight() < Rank.LIEUTENANT.getWeight()) {
+        if (rank.isLowerThan(Rank.LIEUTENANT)) {
             sender.sendMessage(plugin.getConfigManager().getMessage("rank_insufficient")
                     .replace("{required}", Rank.LIEUTENANT.getDisplay()));
             return false;
@@ -51,7 +50,7 @@ public class RankUtil {
         Rank executorRank = plugin.getRankManager().getRank(executor);
         Rank targetRank = plugin.getRankManager().getRank(target);
 
-        if (executorRank.getWeight() <= targetRank.getWeight()) {
+        if (!executorRank.isHigherThan(targetRank)) {
             sender.sendMessage(plugin.getConfigManager().getMessage("rank_cannot_operate")
                     .replace("{target}", target.getName())
                     .replace("{target_rank}", targetRank.getDisplay()));

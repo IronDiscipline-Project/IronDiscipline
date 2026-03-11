@@ -2,10 +2,13 @@ package com.irondiscipline.manager;
 
 import com.irondiscipline.IronDiscipline;
 import org.bukkit.Bukkit;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import xyz.irondiscipline.api.event.PlayerJailEvent;
+import xyz.irondiscipline.api.event.PlayerUnjailEvent;
 
 import com.irondiscipline.util.InventoryUtil;
 import java.util.Map;
@@ -50,6 +53,21 @@ public class JailManager {
             return false;
         }
 
+        PlayerJailEvent jailEvent = null;
+        if (Bukkit.getPluginManager() != null) {
+            jailEvent = new PlayerJailEvent(
+                    target,
+                    reason,
+                    jailer != null ? jailer.getUniqueId() : null
+            );
+            Bukkit.getPluginManager().callEvent(jailEvent);
+            if (jailEvent.isCancelled()) {
+                return false;
+            }
+        }
+
+        final String jailReason = jailEvent != null ? jailEvent.getReason() : reason;
+
         // 現在位置を保存
         Location originalLocation = target.getLocation();
         String locString = serializeLocation(originalLocation);
@@ -69,7 +87,7 @@ public class JailManager {
             return new String[]{invBackup, armorBackup};
         }).thenCompose(backups -> {
             // DB保存
-            return plugin.getStorageManager().saveJailedPlayerAsync(targetId, target.getName(), reason,
+                return plugin.getStorageManager().saveJailedPlayerAsync(targetId, target.getName(), jailReason,
                     jailer != null ? jailer.getUniqueId() : null, locString, backups[0], backups[1]);
         }).thenAccept(success -> {
             if (success) {
@@ -89,14 +107,14 @@ public class JailManager {
                     target.teleport(jailLocation);
 
                     // データ保存 (キャッシュ)
-                    JailData data = new JailData(targetId, target.getName(), reason,
+                        JailData data = new JailData(targetId, target.getName(), jailReason,
                             System.currentTimeMillis(), jailer != null ? jailer.getUniqueId() : null,
                             locString);
                     jailedPlayers.put(targetId, data);
 
                     // 通知
                     target.sendMessage(plugin.getConfigManager().getMessage("jail_you_jailed",
-                            "%reason%", reason != null ? reason : plugin.getConfigManager().getRawMessage("jail_reason_default")));
+                            "%reason%", jailReason != null ? jailReason : plugin.getConfigManager().getRawMessage("jail_reason_default")));
                 });
             } else {
                 plugin.getLogger().warning("隔離処理中断: DB保存に失敗しました - " + target.getName());
@@ -147,6 +165,14 @@ public class JailManager {
 
         if (!isJailed(target)) {
             return false;
+        }
+
+        if (Bukkit.getPluginManager() != null) {
+            PlayerUnjailEvent unjailEvent = new PlayerUnjailEvent(target);
+            Bukkit.getPluginManager().callEvent(unjailEvent);
+            if (unjailEvent.isCancelled()) {
+                return false;
+            }
         }
 
         JailData data = jailedPlayers.remove(targetId);

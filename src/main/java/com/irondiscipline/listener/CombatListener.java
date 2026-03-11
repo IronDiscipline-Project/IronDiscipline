@@ -1,7 +1,10 @@
 package com.irondiscipline.listener;
 
 import com.irondiscipline.IronDiscipline;
+import com.irondiscipline.compat.api.ApiCompat;
+import com.irondiscipline.event.PlayerKillEvent;
 import com.irondiscipline.model.KillLog;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -55,7 +58,16 @@ public class CombatListener implements Listener {
             .build();
         
         // 非同期でDB保存
-        plugin.getStorageManager().saveKillLogAsync(log);
+        plugin.getStorageManager().saveKillLogAsync(log).thenRun(() ->
+            Bukkit.getPluginManager().callEvent(
+                new xyz.irondiscipline.api.event.PlayerKillEvent(killer, victim, ApiCompat.toApiKillLog(log))
+            )
+        );
+
+        // 既存イベントは同期のまま維持
+        plugin.getTaskScheduler().runGlobal(() ->
+            Bukkit.getPluginManager().callEvent(new PlayerKillEvent(killer, victim, log))
+        );
         
         // デバッグログ
         if (plugin.getConfigManager().isDebug()) {

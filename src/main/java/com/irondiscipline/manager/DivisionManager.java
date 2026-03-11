@@ -1,6 +1,8 @@
 package com.irondiscipline.manager;
 
 import com.irondiscipline.IronDiscipline;
+import com.irondiscipline.model.Rank;
+import com.irondiscipline.util.TabNametagUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bukkit.Bukkit;
@@ -13,8 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 部隊マネージャー
  * 憲兵(MP)、歩兵、砲兵などの部隊管理
+ * <p>{@link IDivisionProvider} を実装し、アドオンプラグインに部隊管理機能を提供します。</p>
  */
-public class DivisionManager {
+public class DivisionManager  {
 
     private final IronDiscipline plugin;
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -56,6 +59,9 @@ public class DivisionManager {
         divisions.add(div);
         playerDivisions.put(playerId, div);
         saveData();
+        
+        // オンラインプレイヤーならTab/ネームタグを更新
+        updatePlayerDisplay(playerId);
     }
 
     /**
@@ -64,6 +70,29 @@ public class DivisionManager {
     public void removeDivision(UUID playerId) {
         playerDivisions.remove(playerId);
         saveData();
+        
+        // オンラインプレイヤーならTab/ネームタグを更新
+        updatePlayerDisplay(playerId);
+    }
+    
+    /**
+     * プレイヤーのTab/ネームタグ表示を更新
+     */
+    private void updatePlayerDisplay(UUID playerId) {
+        Player player = Bukkit.getPlayer(playerId);
+        if (player != null && player.isOnline()) {
+            if (plugin.getTaskScheduler() != null) {
+                plugin.getTaskScheduler().runGlobal(() -> {
+                    Rank rank = plugin.getRankManager().getRank(player);
+                    String divisionDisplay = getDivisionDisplay(playerId);
+                    TabNametagUtil.updatePlayer(player, rank, divisionDisplay);
+                });
+            } else {
+                Rank rank = plugin.getRankManager().getRank(player);
+                String divisionDisplay = getDivisionDisplay(playerId);
+                TabNametagUtil.updatePlayer(player, rank, divisionDisplay);
+            }
+        }
     }
 
     /**
@@ -150,7 +179,7 @@ public class DivisionManager {
      * データを保存
      */
     private void saveData() {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        Runnable writeTask = () -> {
             try {
                 DivisionData data = new DivisionData();
                 data.divisions = new ArrayList<>(divisions);
@@ -164,7 +193,13 @@ public class DivisionManager {
             } catch (IOException e) {
                 plugin.getLogger().warning("部隊データ保存失敗: " + e.getMessage());
             }
-        });
+        };
+
+        if (plugin.getTaskScheduler() != null) {
+            plugin.getTaskScheduler().runAsync(writeTask);
+        } else {
+            writeTask.run();
+        }
     }
 
     /**

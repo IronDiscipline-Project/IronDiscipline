@@ -3,12 +3,14 @@ package com.irondiscipline.manager;
 import com.irondiscipline.IronDiscipline;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.bukkit.Bukkit;
 
 import java.io.*;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Discord-Minecraft アカウント連携マネージャー
@@ -30,14 +32,30 @@ public class LinkManager {
     private File dataFile;
     private final SecureRandom random = new SecureRandom();
     private static final String CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     public LinkManager(IronDiscipline plugin) {
         this.plugin = plugin;
         this.dataFile = new File(plugin.getDataFolder(), "links.json");
         loadData();
 
-        // 期限切れコードのクリーンアップ（1分毎）
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::cleanupExpiredCodes, 20 * 60, 20 * 60);
+        // 期限切れコードのクリーンアップ（1分毎）- Folia対応
+        scheduler.scheduleAtFixedRate(this::cleanupExpiredCodes, 60, 60, TimeUnit.SECONDS);
+    }
+
+    /**
+     * シャットダウン時にスケジューラーを停止
+     */
+    public void shutdown() {
+        scheduler.shutdown();
+        try {
+            if (!scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                scheduler.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            scheduler.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**
@@ -155,20 +173,18 @@ public class LinkManager {
     }
 
     private void saveData() {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                LinkData data = new LinkData();
-                for (Map.Entry<Long, UUID> entry : discordToMinecraft.entrySet()) {
-                    data.links.put(entry.getKey().toString(), entry.getValue().toString());
-                }
-
-                try (Writer writer = new FileWriter(dataFile)) {
-                    gson.toJson(data, writer);
-                }
-            } catch (IOException e) {
-                plugin.getLogger().warning("連携データ保存失敗: " + e.getMessage());
+        try {
+            LinkData data = new LinkData();
+            for (Map.Entry<Long, UUID> entry : discordToMinecraft.entrySet()) {
+                data.links.put(entry.getKey().toString(), entry.getValue().toString());
             }
-        });
+
+            try (Writer writer = new FileWriter(dataFile)) {
+                gson.toJson(data, writer);
+            }
+        } catch (IOException e) {
+            plugin.getLogger().warning("連携データ保存失敗: " + e.getMessage());
+        }
     }
 
     private void loadData() {

@@ -5,7 +5,7 @@ import com.irondiscipline.model.Rank;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
+
 
 /**
  * 自動昇進マネージャー
@@ -15,7 +15,7 @@ public class AutoPromotionManager {
 
     private final IronDiscipline plugin;
     private final RankManager rankManager;
-    private BukkitTask task;
+    private org.bukkit.scheduler.BukkitTask task;
 
     public AutoPromotionManager(IronDiscipline plugin, RankManager rankManager) {
         this.plugin = plugin;
@@ -34,7 +34,7 @@ public class AutoPromotionManager {
 
         int intervalSeconds = plugin.getConfigManager().getTimeBasedPromotionInterval();
 
-        task = plugin.getTaskScheduler().runGlobalTimer(() -> checkPromotions(), intervalSeconds * 20L,
+        task = plugin.getTaskScheduler().runGlobalTimer(this::checkPromotions, intervalSeconds * 20L,
                 intervalSeconds * 20L);
     }
 
@@ -92,9 +92,14 @@ public class AutoPromotionManager {
                     + "m / " + requiredMinutes + "m)");
             rankManager.promote(player).thenAccept(newRank -> {
                 if (newRank != null) {
-                    player.sendMessage(plugin.getConfigManager().getMessage("rank_promoted",
-                            "%player%", player.getName(),
-                            "%rank%", newRank.getDisplay()));
+                    plugin.getTaskScheduler().runEntity(player, () -> {
+                        if (!player.isOnline()) {
+                            return;
+                        }
+                        player.sendMessage(plugin.getConfigManager().getMessage("rank_promoted",
+                                "%player%", player.getName(),
+                                "%rank%", newRank.getDisplay()));
+                    });
                     // 必要であればDiscord通知など
                 }
             });

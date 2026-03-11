@@ -1,5 +1,6 @@
 package com.irondiscipline.manager;
 
+import com.irondiscipline.compat.api.ApiCompat;
 import com.irondiscipline.IronDiscipline;
 import com.irondiscipline.model.Rank;
 import com.irondiscipline.util.TabNametagUtil;
@@ -8,6 +9,7 @@ import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.types.MetaNode;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import xyz.irondiscipline.api.event.RankChangeEvent;
 
 import java.util.Map;
 import java.util.UUID;
@@ -78,10 +80,13 @@ public class RankManager {
      * プレイヤーの階級を設定
      */
     public CompletableFuture<Boolean> setRank(Player player, Rank newRank) {
+        Rank oldRank = getRank(player);
         return setRankByUUID(player.getUniqueId(), newRank).thenApply(success -> {
             if (success) {
                 // キャッシュ更新
                 rankCache.put(player.getUniqueId(), newRank);
+
+                ApiCompat.fireRankChange(player, oldRank, newRank, RankChangeEvent.Cause.SET);
 
                 // Tab/ネームタグ即時更新 (メインスレッドで行うことを保証)
                 // Tab/ネームタグ即時更新 (メインスレッドで行うことを保証)
@@ -138,7 +143,24 @@ public class RankManager {
             return CompletableFuture.completedFuture(null); // 最高階級
         }
 
-        return setRank(player, next).thenApply(success -> success ? next : null);
+        return setRankByUUID(player.getUniqueId(), next).thenApply(success -> {
+            if (!success) {
+                return null;
+            }
+
+            rankCache.put(player.getUniqueId(), next);
+            ApiCompat.fireRankChange(player, current, next, RankChangeEvent.Cause.PROMOTE);
+
+            plugin.getTaskScheduler().runEntity(player, () -> {
+                if (!player.isOnline()) {
+                    return;
+                }
+                TabNametagUtil.updatePlayer(player, next);
+                player.sendMessage(plugin.getConfigManager().getMessage("rank_changed_self",
+                        "%rank%", next.getDisplay()));
+            });
+            return next;
+        });
     }
 
     /**
@@ -152,7 +174,24 @@ public class RankManager {
             return CompletableFuture.completedFuture(null); // 最低階級
         }
 
-        return setRank(player, prev).thenApply(success -> success ? prev : null);
+        return setRankByUUID(player.getUniqueId(), prev).thenApply(success -> {
+            if (!success) {
+                return null;
+            }
+
+            rankCache.put(player.getUniqueId(), prev);
+            ApiCompat.fireRankChange(player, current, prev, RankChangeEvent.Cause.DEMOTE);
+
+            plugin.getTaskScheduler().runEntity(player, () -> {
+                if (!player.isOnline()) {
+                    return;
+                }
+                TabNametagUtil.updatePlayer(player, prev);
+                player.sendMessage(plugin.getConfigManager().getMessage("rank_changed_self",
+                        "%rank%", prev.getDisplay()));
+            });
+            return prev;
+        });
     }
 
     /**

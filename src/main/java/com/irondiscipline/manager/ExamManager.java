@@ -74,7 +74,11 @@ public class ExamManager implements Listener {
 
         plugin.getRankManager().promote(target).thenAccept(newRank -> {
             if (newRank != null) {
-                target.sendMessage(plugin.getConfigManager().getMessage("exam_promotion_congrats", "%rank%", newRank.getDisplay()));
+                plugin.getTaskScheduler().runEntity(target, () -> {
+                    if (target.isOnline()) {
+                        target.sendMessage(plugin.getConfigManager().getMessage("exam_promotion_congrats", "%rank%", newRank.getDisplay()));
+                    }
+                });
             }
         });
     }
@@ -198,17 +202,26 @@ public class ExamManager implements Listener {
 
         event.setCancelled(true); // チャットをキャンセル
         QuizSession session = quizSessions.get(player.getUniqueId());
-        String answer = event.getMessage();
-
-        // 強制終了コマンド
-        if (answer.equalsIgnoreCase("cancel")) {
-            quizSessions.remove(player.getUniqueId());
-            player.sendMessage(plugin.getConfigManager().getMessage("exam_quiz_cancelled"));
+        if (session == null) {
             return;
         }
+        String answer = event.getMessage();
+        plugin.getTaskScheduler().runEntity(player, () -> {
+            if (!player.isOnline()) {
+                return;
+            }
 
-        Question q = session.getCurrentQuestion();
-        if (q != null) {
+            if (answer.equalsIgnoreCase("cancel")) {
+                quizSessions.remove(player.getUniqueId());
+                player.sendMessage(plugin.getConfigManager().getMessage("exam_quiz_cancelled"));
+                return;
+            }
+
+            Question q = session.getCurrentQuestion();
+            if (q == null) {
+                return;
+            }
+
             boolean isCorrect = q.isCorrect(answer);
             if (isCorrect) {
                 player.sendMessage(plugin.getConfigManager().getMessage("exam_quiz_correct"));
@@ -218,10 +231,8 @@ public class ExamManager implements Listener {
             }
 
             session.currentIndex++;
-
-            // 次の問題へ（少し遅延させると親切だが、今回は即時）
-            Bukkit.getScheduler().runTask(plugin, () -> askNextQuestion(player, session));
-        }
+            askNextQuestion(player, session);
+        });
     }
 
     // 内部クラス

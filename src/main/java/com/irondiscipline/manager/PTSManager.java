@@ -7,7 +7,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
+
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,17 +27,33 @@ public class PTSManager {
     private final Set<UUID> requestingPlayers = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     // 期限切れチェック用タスク
-    private BukkitTask expirationTask;
+    private org.bukkit.scheduler.BukkitTask expirationTask;
 
     public PTSManager(IronDiscipline plugin) {
         this.plugin = plugin;
         startExpirationChecker();
     }
 
+    // ... (methods omitted)
+
+
+    
+
+
     /**
      * 発言許可があるかチェック
      */
     public boolean hasPermissionToSpeak(Player player) {
+        // PTSが無効化されている場合は常に許可
+        if (!plugin.getConfigManager().isPTSEnabled()) {
+            return true;
+        }
+
+        // 試験中でない場合は常に許可
+        if (plugin.getExamManager() != null && !plugin.getExamManager().isInExam(player.getUniqueId())) {
+            return true;
+        }
+
         // PTS免除権限を持っている場合
         if (player.hasPermission("iron.pts.bypass")) {
             return true;
@@ -129,6 +145,7 @@ public class PTSManager {
                 "%player%", requester.getName());
 
         int threshold = plugin.getConfigManager().getPTSRequireBelowWeight();
+        Rank thresholdRank = Rank.fromWeight(threshold);
 
         for (Player officer : Bukkit.getOnlinePlayers()) {
             // 自分自身はスキップ
@@ -137,7 +154,7 @@ public class PTSManager {
 
             // PTS付与権限を持っているか、閾値より上の階級
             if (officer.hasPermission("iron.pts.grant") ||
-                    plugin.getRankManager().getRank(officer).getWeight() > threshold) {
+                    plugin.getRankManager().getRank(officer).isHigherThan(thresholdRank)) {
                 officer.sendMessage(message);
 
                 // サウンド通知
@@ -152,6 +169,7 @@ public class PTSManager {
      */
     public void notifyOfficersWithMessage(Player requester, String chatMessage) {
         int threshold = plugin.getConfigManager().getPTSRequireBelowWeight();
+        Rank thresholdRank = Rank.fromWeight(threshold);
         Rank requesterRank = plugin.getRankManager().getRank(requester);
 
         String formattedMessage = plugin.getConfigManager().getPTSRequestPrefix() + " " +
@@ -163,7 +181,7 @@ public class PTSManager {
                 continue;
 
             if (officer.hasPermission("iron.pts.grant") ||
-                    plugin.getRankManager().getRank(officer).getWeight() > threshold) {
+                    plugin.getRankManager().getRank(officer).isHigherThan(thresholdRank)) {
                 officer.sendMessage(formattedMessage);
             }
         }
@@ -259,7 +277,7 @@ public class PTSManager {
      * タスク停止 (シャットダウン処理)
      */
     public void shutdown() {
-        if (expirationTask != null) {
+        if (expirationTask != null && !expirationTask.isCancelled()) {
             expirationTask.cancel();
         }
     }

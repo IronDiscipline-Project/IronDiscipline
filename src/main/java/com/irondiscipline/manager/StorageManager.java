@@ -696,4 +696,16 @@ public class StorageManager {
         }
         dbExecutor.shutdown();
     }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public ExecutorService getDbExecutor() {
+        return dbExecutor;
+    }
+
+    public String getDatabaseType() {
+        return dbType;
+    }
 }

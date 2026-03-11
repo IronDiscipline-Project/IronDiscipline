@@ -20,12 +20,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
 
     private final IronDiscipline plugin;
+    private final AddonCommand addonCommand;
     
     // freeze中のプレイヤー
     private final Set<UUID> frozenPlayers = ConcurrentHashMap.newKeySet();
 
     public IronDisciplineCommand(IronDiscipline plugin) {
         this.plugin = plugin;
+        this.addonCommand = new AddonCommand(plugin);
         plugin.getCommand("irondiscipline").setTabCompleter(this);
         
         // Freeze中の移動を防ぐ
@@ -76,6 +78,7 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
             case "freeze" -> handleFreeze(sender, args);
             case "unfreeze" -> handleUnfreeze(sender, args);
             case "announce", "ann" -> handleAnnounce(sender, args);
+            case "addon" -> addonCommand.handle(sender, args);
             default -> showHelp(sender);
         }
 
@@ -236,6 +239,7 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_freeze"));
         sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_unfreeze"));
         sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_announce"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("iron_help_addon"));
     }
 
     @Override
@@ -243,7 +247,7 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
             String prefix = args[0].toLowerCase();
-            for (String sub : new String[]{"reload", "version", "cleanup", "kick", "ban", "tp", "bring", "freeze", "unfreeze", "announce"}) {
+            for (String sub : new String[]{"reload", "version", "cleanup", "kick", "ban", "tp", "bring", "freeze", "unfreeze", "announce", "addon"}) {
                 if (sub.startsWith(prefix)) {
                     completions.add(sub);
                 }
@@ -256,6 +260,8 @@ public class IronDisciplineCommand implements CommandExecutor, TabCompleter {
                         completions.add(p.getName());
                     }
                 }
+            } else if ("addon".equals(sub)) {
+                completions.addAll(addonCommand.tabComplete(args));
             }
         }
         return completions;

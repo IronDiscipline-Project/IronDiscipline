@@ -1,5 +1,6 @@
 package com.irondiscipline;
 
+import com.irondiscipline.compat.api.ApiCompat;
 import com.irondiscipline.command.*;
 import com.irondiscipline.listener.*;
 import com.irondiscipline.manager.*;
@@ -35,6 +36,8 @@ public class IronDiscipline extends JavaPlugin {
     private LinkManager linkManager;
     private DiscordManager discordManager;
     private AutoPromotionManager autoPromotionManager;
+    private WebDashboardManager webDashboardManager;
+    private AddonManager addonManager;
 
     // Utilities
     private com.irondiscipline.util.TaskScheduler taskScheduler;
@@ -64,6 +67,9 @@ public class IronDiscipline extends JavaPlugin {
         // Manager初期化
         initializeManagers();
 
+        // dev API 互換サービス登録
+        ApiCompat.registerServices(this);
+
         // リスナー登録
         registerListeners();
 
@@ -75,6 +81,8 @@ public class IronDiscipline extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        ApiCompat.unregisterServices(this);
+
         // タスク停止
         if (ptsManager != null) {
             ptsManager.shutdown();
@@ -95,6 +103,12 @@ public class IronDiscipline extends JavaPlugin {
         }
         if (discordManager != null) {
             discordManager.shutdown();
+        }
+        if (linkManager != null) {
+            linkManager.shutdown();
+        }
+        if (webDashboardManager != null) {
+            webDashboardManager.shutdown();
         }
 
         getLogger().info(configManager.getRawMessage("log_shutdown_complete"));
@@ -139,6 +153,7 @@ public class IronDiscipline extends JavaPlugin {
         this.linkManager = new LinkManager(this);
         this.discordManager = new DiscordManager(this);
         this.autoPromotionManager = new AutoPromotionManager(this, rankManager);
+        this.addonManager = new AddonManager(this);
 
         // Start auto-promotion task
         this.autoPromotionManager.startTask();
@@ -146,10 +161,14 @@ public class IronDiscipline extends JavaPlugin {
         // Discord Bot 起動
         initDiscord();
 
+        // Web Dashboard 起動
+        initWebDashboard();
+
         getLogger().info(configManager.getRawMessage("log_managers_initialized"));
     }
 
     private void registerListeners() {
+        Bukkit.getPluginManager().registerEvents(new JailListener(this), this);
         Bukkit.getPluginManager().registerEvents(new ChatListener(this), this);
         Bukkit.getPluginManager().registerEvents(new CombatListener(this), this);
         Bukkit.getPluginManager().registerEvents(new JoinQuitListener(this), this);
@@ -195,6 +214,15 @@ public class IronDiscipline extends JavaPlugin {
         getCommand("link").setExecutor(new LinkCommand(this));
 
         getLogger().info(configManager.getRawMessage("log_commands_registered"));
+    }
+
+    private void initWebDashboard() {
+        if (getConfig().getBoolean("dashboard.enabled", false)) {
+            this.webDashboardManager = new WebDashboardManager(this);
+            webDashboardManager.start();
+        } else {
+            getLogger().info("Web Dashboard is disabled. Set dashboard.enabled=true in config.yml to enable.");
+        }
     }
 
     private void initDiscord() {
@@ -283,8 +311,16 @@ public class IronDiscipline extends JavaPlugin {
         return discordManager;
     }
 
+    public WebDashboardManager getWebDashboardManager() {
+        return webDashboardManager;
+    }
+
     public AutoPromotionManager getAutoPromotionManager() {
         return autoPromotionManager;
+    }
+
+    public AddonManager getAddonManager() {
+        return addonManager;
     }
 
     public LuckPerms getLuckPerms() {

@@ -78,6 +78,25 @@ public class TaskScheduler {
     }
 
     /**
+     * エンティティに関連付けられた定期タスクを実行（Paper: メインスレッドで実行）
+     */
+    public BukkitTask runEntityTimer(Entity entity, Runnable runnable, long delayTicks, long periodTicks) {
+        return Bukkit.getScheduler().runTaskTimer(plugin, runnable, delayTicks, periodTicks);
+    }
+
+    /**
+     * エンティティに関連付けられた定期タスクを実行（自己参照可能）
+     */
+    public void runEntityTimer(Entity entity, Consumer<BukkitTask> task, long delayTicks, long periodTicks) {
+        Bukkit.getScheduler().runTaskTimer(plugin, new org.bukkit.scheduler.BukkitRunnable() {
+            @Override
+            public void run() {
+                task.accept(new BukkitTaskWrapper(this));
+            }
+        }, delayTicks, periodTicks);
+    }
+
+    /**
      * 特定の場所でタスクを実行（Paper: メインスレッドで実行）
      */
     public BukkitTask runRegion(Location location, Runnable runnable) {

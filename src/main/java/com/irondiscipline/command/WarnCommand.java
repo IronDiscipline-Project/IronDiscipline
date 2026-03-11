@@ -58,12 +58,8 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
         }
 
         // オフライン検索のみ非同期
-        CompletableFuture.supplyAsync(() -> {
-            @SuppressWarnings("deprecation")
-            OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
-            return p;
-        }).thenAccept(offlineTarget -> {
-            Bukkit.getScheduler().runTask(plugin, () -> executeWarn(sender, offlineTarget, args));
+        resolveOfflinePlayerAsync(args[0]).thenAccept(offlineTarget -> {
+            plugin.getTaskScheduler().runGlobal(() -> executeWarn(sender, offlineTarget, args));
         });
     }
 
@@ -95,7 +91,7 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
                 reasonStr,
                 sender instanceof Player ? ((Player) sender).getUniqueId() : null
         ).thenAccept(count -> {
-            Bukkit.getScheduler().runTask(plugin, () -> {
+            plugin.getTaskScheduler().runGlobal(() -> {
                 // 通知
                 sender.sendMessage(plugin.getConfigManager().getMessage("warn_success", "%player%", target.getName(), "%count%", String.valueOf(count)));
 
@@ -120,11 +116,8 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
             if (onlineTarget != null) {
                 showWarnings(sender, onlineTarget);
             } else {
-                CompletableFuture.supplyAsync(() -> {
-                    @SuppressWarnings("deprecation")
-                    OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
-                    return p;
-                }).thenAccept(target -> Bukkit.getScheduler().runTask(plugin, () -> showWarnings(sender, target)));
+                resolveOfflinePlayerAsync(args[0])
+                        .thenAccept(target -> plugin.getTaskScheduler().runGlobal(() -> showWarnings(sender, target)));
             }
         } else if (sender instanceof Player) {
             showWarnings(sender, (Player) sender);
@@ -140,7 +133,7 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
         }
 
         plugin.getWarningManager().getWarnings(target.getUniqueId()).thenAccept(warnings -> {
-            Bukkit.getScheduler().runTask(plugin, () -> {
+            plugin.getTaskScheduler().runGlobal(() -> {
                 if (warnings.isEmpty()) {
                     sender.sendMessage(plugin.getConfigManager().getMessage("warn_none", "%player%", target.getName()));
                     return;
@@ -166,11 +159,8 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
         if (onlineTarget != null) {
             executeClearWarnings(sender, onlineTarget);
         } else {
-            CompletableFuture.supplyAsync(() -> {
-                @SuppressWarnings("deprecation")
-                OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
-                return p;
-            }).thenAccept(target -> Bukkit.getScheduler().runTask(plugin, () -> executeClearWarnings(sender, target)));
+            resolveOfflinePlayerAsync(args[0])
+                    .thenAccept(target -> plugin.getTaskScheduler().runGlobal(() -> executeClearWarnings(sender, target)));
         }
     }
 
@@ -181,7 +171,7 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
         }
 
         plugin.getWarningManager().clearWarnings(target.getUniqueId()).thenRun(() -> {
-            Bukkit.getScheduler().runTask(plugin, () -> {
+            plugin.getTaskScheduler().runGlobal(() -> {
                 sender.sendMessage(plugin.getConfigManager().getMessage("warn_clear_success", "%player%", target.getName()));
             });
         });
@@ -197,11 +187,8 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
         if (onlineTarget != null) {
             executeUnwarn(sender, onlineTarget);
         } else {
-            CompletableFuture.supplyAsync(() -> {
-                @SuppressWarnings("deprecation")
-                OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
-                return p;
-            }).thenAccept(target -> Bukkit.getScheduler().runTask(plugin, () -> executeUnwarn(sender, target)));
+            resolveOfflinePlayerAsync(args[0])
+                    .thenAccept(target -> plugin.getTaskScheduler().runGlobal(() -> executeUnwarn(sender, target)));
         }
     }
 
@@ -212,7 +199,7 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
         }
 
         plugin.getWarningManager().removeLastWarning(target.getUniqueId()).thenAccept(success -> {
-            Bukkit.getScheduler().runTask(plugin, () -> {
+            plugin.getTaskScheduler().runGlobal(() -> {
                 if (success) {
                     sender.sendMessage(plugin.getConfigManager().getMessage("warn_remove_success", "%player%", target.getName()));
                 } else {
@@ -232,8 +219,7 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
             // 憲兵は士官未満のみ
             if (target instanceof Player) {
                 if (plugin.getRankManager().getRank((Player) target)
-                        .getWeight() >= com.irondiscipline.model.Rank.LIEUTENANT
-                                .getWeight()) {
+                        .isHigherThan(com.irondiscipline.model.Rank.CORPORAL)) {
                     sender.sendMessage(plugin.getConfigManager().getMessage("warn_cannot_warn_officer"));
                     return false;
                 }
@@ -246,6 +232,15 @@ public class WarnCommand implements CommandExecutor, TabCompleter {
             return plugin.getRankUtil().checkAll(sender, (Player) target);
         }
         return true;
+    }
+
+    private CompletableFuture<OfflinePlayer> resolveOfflinePlayerAsync(String name) {
+        CompletableFuture<OfflinePlayer> future = new CompletableFuture<>();
+        plugin.getTaskScheduler().runAsync(() -> {
+            OfflinePlayer player = Bukkit.getOfflinePlayer(name);
+            future.complete(player);
+        });
+        return future;
     }
 
     @Override
